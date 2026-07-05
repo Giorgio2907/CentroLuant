@@ -5,19 +5,55 @@
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card">
-                <div class="card-header bg-primary text-white d-flex justify-content-between">
-                    <span>Factura #@Model.ID_Factura</span>
-                    <span class="badge @(Model.EstadoPago == "Pagado" ? "bg-success" : "bg-warning")">@Model.EstadoPago</span>
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-receipt me-2"></i>Factura #@Model.ID_Factura</span>
+                    <span class="badge @(Model.EstadoPago == "Pagado" ? "bg-success" : "bg-warning text-dark")">
+                        @Model.EstadoPago
+                    </span>
                 </div>
                 <div class="card-body">
-                    <p><strong>Paciente:</strong> @Model.NombrePaciente</p>
-                    <p><strong>DNI:</strong> @Model.DNI_Paciente</p>
-                    <p><strong>Fecha de Emisión:</strong> @Model.FechaEmision</p>
-                    <p><strong>Descripción:</strong> @Model.DescripcionServicios</p>
-                    <h5 class="text-end">Total: S/ @Model.MontoTotal</h5>
-                    <div class="d-flex gap-2 mt-3">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <p class="mb-1"><strong>Paciente:</strong> @Model.NombrePaciente</p>
+                            <p class="mb-1"><strong>DNI:</strong> @Model.DNI_Paciente</p>
+                            <p class="mb-1"><strong>Fecha de Emisión:</strong> @Model.FechaEmision</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <div class="alert alert-info py-2 mb-0">
+                                <small class="d-block text-muted">Tipo de cambio (API)</small>
+                                <strong>1 USD = S/ @(1 / ViewBag.TipoCambio)</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <p><strong>Descripción de Servicios:</strong></p>
+                    <p class="text-muted">@Model.DescripcionServicios</p>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-end gap-4 align-items-center">
+                        <div class="text-end">
+                            <p class="mb-0 text-muted small">Monto en USD</p>
+                            <h6 class="text-muted">$ @ViewBag.MontoUSD</h6>
+                        </div>
+                        <div class="text-end">
+                            <p class="mb-0 text-muted small">Total a pagar</p>
+                            <h4 class="text-primary fw-bold">S/ @Model.MontoTotal</h4>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        @if (Model.EstadoPago == "Pendiente")
+                        {
+                            <a asp-action="ActualizarEstado" asp-route-id="@Model.ID_Factura"
+                               asp-route-estado="Pagado" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Marcar como Pagado
+                            </a>
+                        }
                         <a asp-action="Index" class="btn btn-secondary">Volver</a>
                     </div>
                 </div>

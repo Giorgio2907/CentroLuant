@@ -23,15 +23,22 @@
                     <form asp-action="Registrar" method="post">
                         <div class="mb-3">
                             <label class="form-label">DNI *</label>
-                            <input asp-for="DNI" class="form-control" maxlength="8" required />
+                            <div class="input-group">
+                                <input asp-for="DNI" class="form-control" maxlength="8"
+                                       id="dniInput" placeholder="Ingrese 8 dígitos" required />
+                                <button type="button" class="btn btn-outline-primary" onclick="consultarDni()">
+                                    <i class="bi bi-search"></i> Consultar
+                                </button>
+                            </div>
+                            <div id="dniMensaje" class="mt-1"></div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Nombres *</label>
-                            <input asp-for="Nombres" class="form-control" required />
+                            <input asp-for="Nombres" class="form-control" id="nombres" required />
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Apellidos *</label>
-                            <input asp-for="Apellidos" class="form-control" required />
+                            <input asp-for="Apellidos" class="form-control" id="apellidos" required />
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Fecha de Nacimiento</label>
@@ -67,3 +74,34 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        async function consultarDni() {
+            const dni = document.getElementById('dniInput').value;
+            const mensaje = document.getElementById('dniMensaje');
+
+            if (dni.length !== 8) {
+                mensaje.innerHTML = '<span class="text-danger">El DNI debe tener 8 dígitos</span>';
+                return;
+            }
+
+            mensaje.innerHTML = '<span class="text-muted">Consultando...</span>';
+
+            try {
+                const response = await fetch(`/Paciente/ConsultarDni?dni=${dni}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('nombres').value = data.nombres;
+                    document.getElementById('apellidos').value = data.apellidos;
+                    mensaje.innerHTML = '<span class="text-success"><i class="bi bi-check-circle"></i> Datos encontrados</span>';
+                } else {
+                    mensaje.innerHTML = `<span class="text-danger">${data.message}</span>`;
+                }
+            } catch {
+                mensaje.innerHTML = '<span class="text-danger">Error al consultar el servicio</span>';
+            }
+        }
+    </script>
+}

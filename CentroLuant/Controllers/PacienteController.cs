@@ -1,5 +1,6 @@
 ﻿using CentroLuant.Models;
 using CentroLuant.Repositories;
+using CentroLuant.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CentroLuant.Controllers
@@ -7,10 +8,12 @@ namespace CentroLuant.Controllers
     public class PacienteController : Controller
     {
         private readonly PacienteRepository _pacienteRepo;
+        private readonly DniService _dniService;
 
-        public PacienteController(PacienteRepository pacienteRepo)
+        public PacienteController(PacienteRepository pacienteRepo, DniService dniService)
         {
             _pacienteRepo = pacienteRepo;
+            _dniService = dniService;
         }
 
         public IActionResult Index()
@@ -62,6 +65,25 @@ namespace CentroLuant.Controllers
         {
             _pacienteRepo.Eliminar(dni);
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConsultarDni(string dni)
+        {
+            if (string.IsNullOrEmpty(dni) || dni.Length != 8)
+                return Json(new { success = false, message = "DNI inválido" });
+
+            var resultado = await _dniService.ConsultarDni(dni);
+
+            if (resultado == null)
+                return Json(new { success = false, message = "No se encontró el DNI" });
+
+            return Json(new
+            {
+                success = true,
+                nombres = resultado.Nombres,
+                apellidos = $"{resultado.ApellidoPaterno} {resultado.ApellidoMaterno}"
+            });
         }
     }
 }

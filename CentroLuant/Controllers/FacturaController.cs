@@ -1,5 +1,6 @@
 ﻿using CentroLuant.Models;
 using CentroLuant.Repositories;
+using CentroLuant.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CentroLuant.Controllers
@@ -9,12 +10,15 @@ namespace CentroLuant.Controllers
         private readonly FacturaRepository _facturaRepo;
         private readonly PacienteRepository _pacienteRepo;
         private readonly HistorialRepository _historialRepo;
+        private readonly TipoCambioService _tipoCambioService;
 
-        public FacturaController(FacturaRepository facturaRepo, PacienteRepository pacienteRepo, HistorialRepository historialRepo)
+        public FacturaController(FacturaRepository facturaRepo, PacienteRepository pacienteRepo,
+            HistorialRepository historialRepo, TipoCambioService tipoCambioService)
         {
             _facturaRepo = facturaRepo;
             _pacienteRepo = pacienteRepo;
             _historialRepo = historialRepo;
+            _tipoCambioService = tipoCambioService;
         }
 
         public IActionResult Index()
@@ -23,10 +27,13 @@ namespace CentroLuant.Controllers
             return View(facturas);
         }
 
-        public IActionResult Detalle(int id)
+        public async Task<IActionResult> Detalle(int id)
         {
             var factura = _facturaRepo.ObtenerPorId(id);
             if (factura == null) return NotFound();
+            var tipoCambio = await _tipoCambioService.ObtenerTipoCambio();
+            ViewBag.TipoCambio = tipoCambio;
+            ViewBag.MontoUSD = Math.Round(factura.MontoTotal * tipoCambio, 2);
             return View(factura);
         }
 
@@ -49,7 +56,8 @@ namespace CentroLuant.Controllers
         {
             factura.FechaEmision = DateOnly.FromDateTime(DateTime.Now);
             _facturaRepo.Registrar(factura);
-            return RedirectToAction("Detalle", new { id = _facturaRepo.ObtenerPorPaciente(factura.DNI_Paciente).Last().ID_Factura });
+            var facturas = _facturaRepo.ObtenerPorPaciente(factura.DNI_Paciente);
+            return RedirectToAction("Detalle", new { id = facturas.Last().ID_Factura });
         }
 
         public IActionResult ActualizarEstado(int id, string estado)
