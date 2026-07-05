@@ -15,30 +15,61 @@ namespace CentroLuant.Repositories
         public IEnumerable<Factura> ObtenerTodas()
         {
             using var db = _conexion.ObtenerConexion();
-            return db.Query<Factura>(@"
+            var result = db.Query<dynamic>(@"
                 SELECT f.*, p.Nombres + ' ' + p.Apellidos AS NombrePaciente
                 FROM Factura f
                 LEFT JOIN Paciente p ON f.DNI_Paciente = p.DNI");
+            return result.Select(r => new Factura
+            {
+                ID_Factura = r.ID_Factura,
+                DNI_Paciente = r.DNI_Paciente,
+                FechaEmision = DateOnly.FromDateTime((DateTime)r.FechaEmision),
+                MontoTotal = r.MontoTotal,
+                DescripcionServicios = r.DescripcionServicios,
+                EstadoPago = r.EstadoPago,
+                NombrePaciente = r.NombrePaciente
+            });
         }
 
         public IEnumerable<Factura> ObtenerPorPaciente(string dni)
         {
             using var db = _conexion.ObtenerConexion();
-            return db.Query<Factura>(@"
+            var result = db.Query<dynamic>(@"
                 SELECT f.*, p.Nombres + ' ' + p.Apellidos AS NombrePaciente
                 FROM Factura f
                 LEFT JOIN Paciente p ON f.DNI_Paciente = p.DNI
                 WHERE f.DNI_Paciente = @DNI", new { DNI = dni });
+            return result.Select(r => new Factura
+            {
+                ID_Factura = r.ID_Factura,
+                DNI_Paciente = r.DNI_Paciente,
+                FechaEmision = DateOnly.FromDateTime((DateTime)r.FechaEmision),
+                MontoTotal = r.MontoTotal,
+                DescripcionServicios = r.DescripcionServicios,
+                EstadoPago = r.EstadoPago,
+                NombrePaciente = r.NombrePaciente
+            });
         }
 
         public Factura? ObtenerPorId(int id)
         {
             using var db = _conexion.ObtenerConexion();
-            return db.QueryFirstOrDefault<Factura>(@"
+            var r = db.QueryFirstOrDefault<dynamic>(@"
                 SELECT f.*, p.Nombres + ' ' + p.Apellidos AS NombrePaciente
                 FROM Factura f
                 LEFT JOIN Paciente p ON f.DNI_Paciente = p.DNI
                 WHERE f.ID_Factura = @ID", new { ID = id });
+            if (r == null) return null;
+            return new Factura
+            {
+                ID_Factura = r.ID_Factura,
+                DNI_Paciente = r.DNI_Paciente,
+                FechaEmision = DateOnly.FromDateTime((DateTime)r.FechaEmision),
+                MontoTotal = r.MontoTotal,
+                DescripcionServicios = r.DescripcionServicios,
+                EstadoPago = r.EstadoPago,
+                NombrePaciente = r.NombrePaciente
+            };
         }
 
         public void Registrar(Factura factura)
@@ -46,7 +77,15 @@ namespace CentroLuant.Repositories
             using var db = _conexion.ObtenerConexion();
             db.Execute(@"
                 INSERT INTO Factura (DNI_Paciente, FechaEmision, MontoTotal, DescripcionServicios, EstadoPago)
-                VALUES (@DNI_Paciente, @FechaEmision, @MontoTotal, @DescripcionServicios, @EstadoPago)", factura);
+                VALUES (@DNI_Paciente, @FechaEmision, @MontoTotal, @DescripcionServicios, @EstadoPago)",
+                new
+                {
+                    factura.DNI_Paciente,
+                    FechaEmision = factura.FechaEmision.ToDateTime(TimeOnly.MinValue),
+                    factura.MontoTotal,
+                    factura.DescripcionServicios,
+                    factura.EstadoPago
+                });
         }
 
         public void ActualizarEstado(int id, string estado)

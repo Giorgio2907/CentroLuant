@@ -15,14 +15,39 @@ namespace CentroLuant.Repositories
         public IEnumerable<Paciente> ObtenerTodos()
         {
             using var db = _conexion.ObtenerConexion();
-            return db.Query<Paciente>("SELECT * FROM Paciente");
+            var result = db.Query<dynamic>("SELECT * FROM Paciente");
+            return result.Select(r => new Paciente
+            {
+                DNI = r.DNI,
+                Nombres = r.Nombres,
+                Apellidos = r.Apellidos,
+                FechaNacimiento = r.FechaNacimiento != null ?
+                    DateOnly.FromDateTime((DateTime)r.FechaNacimiento) : null,
+                Direccion = r.Direccion,
+                Telefono = r.Telefono,
+                CorreoElectronico = r.CorreoElectronico,
+                Genero = r.Genero
+            });
         }
 
         public Paciente? ObtenerPorDNI(string dni)
         {
             using var db = _conexion.ObtenerConexion();
-            return db.QueryFirstOrDefault<Paciente>(
+            var r = db.QueryFirstOrDefault<dynamic>(
                 "SELECT * FROM Paciente WHERE DNI = @DNI", new { DNI = dni });
+            if (r == null) return null;
+            return new Paciente
+            {
+                DNI = r.DNI,
+                Nombres = r.Nombres,
+                Apellidos = r.Apellidos,
+                FechaNacimiento = r.FechaNacimiento != null ?
+                    DateOnly.FromDateTime((DateTime)r.FechaNacimiento) : null,
+                Direccion = r.Direccion,
+                Telefono = r.Telefono,
+                CorreoElectronico = r.CorreoElectronico,
+                Genero = r.Genero
+            };
         }
 
         public void Registrar(Paciente paciente)
@@ -30,7 +55,19 @@ namespace CentroLuant.Repositories
             using var db = _conexion.ObtenerConexion();
             db.Execute(@"
                 INSERT INTO Paciente (DNI, Nombres, Apellidos, FechaNacimiento, Direccion, Telefono, CorreoElectronico, Genero)
-                VALUES (@DNI, @Nombres, @Apellidos, @FechaNacimiento, @Direccion, @Telefono, @CorreoElectronico, @Genero)", paciente);
+                VALUES (@DNI, @Nombres, @Apellidos, @FechaNacimiento, @Direccion, @Telefono, @CorreoElectronico, @Genero)",
+                new
+                {
+                    paciente.DNI,
+                    paciente.Nombres,
+                    paciente.Apellidos,
+                    FechaNacimiento = paciente.FechaNacimiento.HasValue ?
+                        paciente.FechaNacimiento.Value.ToDateTime(TimeOnly.MinValue) : (DateTime?)null,
+                    paciente.Direccion,
+                    paciente.Telefono,
+                    paciente.CorreoElectronico,
+                    paciente.Genero
+                });
         }
 
         public void Actualizar(Paciente paciente)
@@ -45,7 +82,19 @@ namespace CentroLuant.Repositories
                     Telefono = @Telefono,
                     CorreoElectronico = @CorreoElectronico,
                     Genero = @Genero
-                WHERE DNI = @DNI", paciente);
+                WHERE DNI = @DNI",
+                new
+                {
+                    paciente.DNI,
+                    paciente.Nombres,
+                    paciente.Apellidos,
+                    FechaNacimiento = paciente.FechaNacimiento.HasValue ?
+                        paciente.FechaNacimiento.Value.ToDateTime(TimeOnly.MinValue) : (DateTime?)null,
+                    paciente.Direccion,
+                    paciente.Telefono,
+                    paciente.CorreoElectronico,
+                    paciente.Genero
+                });
         }
 
         public void Eliminar(string dni)
