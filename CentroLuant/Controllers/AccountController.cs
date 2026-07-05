@@ -37,5 +37,12 @@ namespace CentroLuant.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+
+        // Se muestra cuando un usuario autenticado intenta entrar
+        // a una sección para la que su rol no tiene permiso.
+        public IActionResult AccesoDenegado()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,42 @@
+﻿@model CentroLuant.Models.Usuario
+@{
+    ViewData["Title"] = "Nuevo usuario";
+}
+
+<h3 class="mb-4">Nuevo usuario</h3>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="card" style="max-width: 500px;">
+    <div class="card-body">
+        <form asp-action="Crear" method="post">
+            <div class="mb-3">
+                <label asp-for="NombreCompleto" class="form-label">Nombre completo</label>
+                <input asp-for="NombreCompleto" class="form-control" placeholder="Ej: Dr. Moises Olivas" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="UsuarioLogin" class="form-label">Usuario</label>
+                <input asp-for="UsuarioLogin" class="form-control" placeholder="Ej: doctor" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="ContrasenaHash" class="form-label">Contraseña</label>
+                <input asp-for="ContrasenaHash" type="password" class="form-control" placeholder="••••••••" />
+            </div>
+            <div class="mb-4">
+                <label asp-for="Rol" class="form-label">Rol</label>
+                <select asp-for="Rol" class="form-select">
+                    <option value="">-- Selecciona un rol --</option>
+                    <option value="Recepcionista">Recepcionista</option>
+                    <option value="Especialista">Especialista</option>
+                </select>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
