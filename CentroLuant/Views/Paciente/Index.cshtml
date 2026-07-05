@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CentroLuant.Models.Paciente>
+@{
+    ViewData["Title"] = "Gestión de Pacientes";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary">Gestión de Pacientes</h2>
+        <a asp-action="Registrar" class="btn btn-primary">+ Registrar Paciente</a>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>DNI</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td>@p.DNI</td>
+                            <td>@p.Nombres</td>
+                            <td>@p.Apellidos</td>
+                            <td>@p.Telefono</td>
+                            <td>@p.CorreoElectronico</td>
+                            <td>
+                                <a asp-action="Detalle" asp-route-dni="@p.DNI" class="btn btn-sm btn-info">Ver</a>
+                                <a asp-action="Editar" asp-route-dni="@p.DNI" class="btn btn-sm btn-warning">Editar</a>
+                                <a asp-action="Eliminar" asp-route-dni="@p.DNI" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('¿Eliminar paciente?')">Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

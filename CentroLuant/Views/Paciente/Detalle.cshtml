@@ -1,0 +1,28 @@
+﻿@model CentroLuant.Models.Paciente
+@{
+    ViewData["Title"] = "Detalle Paciente";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">@Model.NombreCompleto</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>DNI:</strong> @Model.DNI</p>
+                    <p><strong>Fecha de Nacimiento:</strong> @Model.FechaNacimiento</p>
+                    <p><strong>Teléfono:</strong> @Model.Telefono</p>
+                    <p><strong>Correo:</strong> @Model.CorreoElectronico</p>
+                    <p><strong>Dirección:</strong> @Model.Direccion</p>
+                    <p><strong>Género:</strong> @Model.Genero</p>
+                    <div class="d-flex gap-2">
+                        <a asp-action="Editar" asp-route-dni="@Model.DNI" class="btn btn-warning">Editar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

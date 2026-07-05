@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Generar Factura";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Generar Factura</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Paciente:</strong> @ViewBag.Paciente.NombreCompleto</p>
+                    <p><strong>DNI:</strong> @ViewBag.Paciente.DNI</p>
+                    <form asp-action="Generar" method="post">
+                        <input type="hidden" name="DNI_Paciente" value="@ViewBag.Paciente.DNI" />
+                        <div class="mb-3">
+                            <label class="form-label">Descripción de Servicios</label>
+                            <textarea name="DescripcionServicios" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Monto Total (S/)</label>
+                            <input type="number" name="MontoTotal" class="form-control" step="0.01" required />
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Generar Factura</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

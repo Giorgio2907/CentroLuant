@@ -1,0 +1,69 @@
+﻿@model CentroLuant.Models.HistorialMedico
+@{
+    ViewData["Title"] = "Gestión Clínica";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-3">Gestión Clínica</h2>
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="get" class="d-flex gap-2">
+                <input type="text" name="dni" class="form-control" placeholder="Ingrese DNI del paciente" />
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </form>
+        </div>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    @if (Model != null)
+    {
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white d-flex justify-content-between">
+                <span>Paciente: @Model.NombrePaciente</span>
+                <span>Historial N° @Model.ID_Historial</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Fecha de Creación:</strong> @Model.FechaCreacion</p>
+                <p><strong>Observaciones Iniciales:</strong> @Model.ObservacionesIniciales</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Tratamientos Registrados</div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Diagnóstico</th>
+                            <th>Costo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var t in ViewBag.Tratamientos as IEnumerable<CentroLuant.Models.Tratamiento>)
+                        {
+                            <tr>
+                                <td>@t.FechaTratamiento</td>
+                                <td>@t.TipoTratamiento</td>
+                                <td>@t.Diagnostico</td>
+                                <td>S/ @t.Costo</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else if (ViewBag.Paciente != null)
+    {
+        <div class="alert alert-warning">
+            El paciente no tiene historial clínico.
+            <a asp-action="Crear" asp-route-dni="@ViewBag.Paciente.DNI" class="btn btn-sm btn-primary ms-2">Crear Historial</a>
+        </div>
+    }
+</div>

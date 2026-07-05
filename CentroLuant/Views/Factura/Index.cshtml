@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CentroLuant.Models.Factura>
+@{
+    ViewData["Title"] = "Facturación";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary">Facturación</h2>
+    </div>
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="get" asp-action="Generar" class="d-flex gap-2">
+                <input type="text" name="dni" class="form-control" placeholder="DNI del paciente para generar factura" />
+                <button type="submit" class="btn btn-primary">Generar Factura</button>
+            </form>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Paciente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var f in Model)
+                    {
+                        <tr>
+                            <td>@f.ID_Factura</td>
+                            <td>@f.NombrePaciente</td>
+                            <td>@f.FechaEmision</td>
+                            <td>S/ @f.MontoTotal</td>
+                            <td>
+                                <span class="badge @(f.EstadoPago == "Pagado" ? "bg-success" : "bg-warning")">
+                                    @f.EstadoPago
+                                </span>
+                            </td>
+                            <td>
+                                <a asp-action="Detalle" asp-route-id="@f.ID_Factura" class="btn btn-sm btn-info">Ver</a>
+                                @if (f.EstadoPago == "Pendiente")
+                                {
+                                    <a asp-action="ActualizarEstado" asp-route-id="@f.ID_Factura" asp-route-estado="Pagado"
+                                       class="btn btn-sm btn-success">Marcar Pagado</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

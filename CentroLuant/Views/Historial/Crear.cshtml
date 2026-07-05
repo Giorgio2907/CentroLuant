@@ -1,0 +1,32 @@
+﻿@model CentroLuant.Models.HistorialMedico
+@{
+    ViewData["Title"] = "Crear Historial";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Crear Historial Médico</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Paciente:</strong> @ViewBag.Paciente.NombreCompleto</p>
+                    <p><strong>DNI:</strong> @ViewBag.Paciente.DNI</p>
+                    <form asp-action="Crear" method="post">
+                        <input type="hidden" name="DNI_Paciente" value="@ViewBag.Paciente.DNI" />
+                        <div class="mb-3">
+                            <label class="form-label">Observaciones Iniciales</label>
+                            <textarea asp-for="ObservacionesIniciales" class="form-control" rows="4"
+                                      placeholder="Ej: Paciente derivado de otro centro, alergias conocidas, etc."></textarea>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Crear Historial</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

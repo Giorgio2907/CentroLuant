@@ -1,0 +1,27 @@
+﻿@model CentroLuant.Models.Factura
+@{
+    ViewData["Title"] = "Detalle Factura";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between">
+                    <span>Factura #@Model.ID_Factura</span>
+                    <span class="badge @(Model.EstadoPago == "Pagado" ? "bg-success" : "bg-warning")">@Model.EstadoPago</span>
+                </div>
+                <div class="card-body">
+                    <p><strong>Paciente:</strong> @Model.NombrePaciente</p>
+                    <p><strong>DNI:</strong> @Model.DNI_Paciente</p>
+                    <p><strong>Fecha de Emisión:</strong> @Model.FechaEmision</p>
+                    <p><strong>Descripción:</strong> @Model.DescripcionServicios</p>
+                    <h5 class="text-end">Total: S/ @Model.MontoTotal</h5>
+                    <div class="d-flex gap-2 mt-3">
+                        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
