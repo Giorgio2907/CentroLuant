@@ -54,6 +54,10 @@
                                 <i class="bi bi-check-circle"></i> Marcar como Pagado
                             </a>
                         }
+                        <a asp-action="DescargarPdf" asp-route-id="@Model.ID_Factura"
+                           class="btn btn-danger">
+                            <i class="bi bi-file-pdf"></i> Descargar PDF
+                        </a>
                         <a asp-action="Index" class="btn btn-secondary">Volver</a>
                     </div>
                 </div>

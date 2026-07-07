@@ -11,14 +11,16 @@ namespace CentroLuant.Controllers
         private readonly PacienteRepository _pacienteRepo;
         private readonly HistorialRepository _historialRepo;
         private readonly TipoCambioService _tipoCambioService;
+        private readonly FacturaPdfService _pdfService;
 
         public FacturaController(FacturaRepository facturaRepo, PacienteRepository pacienteRepo,
-            HistorialRepository historialRepo, TipoCambioService tipoCambioService)
+            HistorialRepository historialRepo, TipoCambioService tipoCambioService, FacturaPdfService pdfService)
         {
             _facturaRepo = facturaRepo;
             _pacienteRepo = pacienteRepo;
             _historialRepo = historialRepo;
             _tipoCambioService = tipoCambioService;
+            _pdfService = pdfService;
         }
 
         public IActionResult Index()
@@ -64,6 +66,14 @@ namespace CentroLuant.Controllers
         {
             _facturaRepo.ActualizarEstado(id, estado);
             return RedirectToAction("Index");
+        }
+
+        public IActionResult DescargarPdf(int id)
+        {
+            var factura = _facturaRepo.ObtenerPorId(id);
+            if (factura == null) return NotFound();
+            var pdf = _pdfService.GenerarPdf(factura);
+            return File(pdf, "application/pdf", $"Factura_{id}.pdf");
         }
     }
 }

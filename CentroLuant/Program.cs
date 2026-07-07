@@ -12,6 +12,7 @@ builder.Services.AddScoped<FacturaRepository>();
 builder.Services.AddScoped<EspecialistaRepository>();
 builder.Services.AddHttpClient<CentroLuant.Services.DniService>();
 builder.Services.AddHttpClient<CentroLuant.Services.TipoCambioService>();
+builder.Services.AddScoped<CentroLuant.Services.FacturaPdfService>();
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
@@ -19,7 +20,6 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
