@@ -21,7 +21,7 @@ namespace CentroLuant.Filters
 
             if (string.IsNullOrEmpty(usuario))
             {
-                context.Result = new RedirectToActionResult("Login", "Account", null);
+                context.Result = new RedirectResult("/Account/Login");
                 return;
             }
 
