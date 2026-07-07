@@ -61,20 +61,25 @@ namespace CentroLuant.Controllers
             return RedirectToAction("Index", new { dni = historial.DNI_Paciente });
         }
 
-        public IActionResult Editar(int id)
+        [HttpPost]
+        public IActionResult AgregarTratamiento(Tratamiento tratamiento, string DNI_Paciente)
         {
-            var tratamiento = new Tratamiento { ID_Historial = id };
+            _historialRepo.RegistrarTratamiento(tratamiento);
+            return RedirectToAction("Index", new { dni = DNI_Paciente });
+        }
+
+        public IActionResult EditarTratamiento(int id)
+        {
+            var tratamiento = _historialRepo.ObtenerTratamientoPorId(id);
+            if (tratamiento == null) return NotFound();
             return View(tratamiento);
         }
 
         [HttpPost]
-        public IActionResult AgregarTratamiento(Tratamiento tratamiento)
+        public IActionResult EditarTratamiento(Tratamiento tratamiento, string DNI_Paciente)
         {
-            tratamiento.FechaTratamiento = DateOnly.FromDateTime(DateTime.Now);
-            _historialRepo.RegistrarTratamiento(tratamiento);
-            var historial = _historialRepo.ObtenerPorPaciente(
-                _historialRepo.ObtenerTratamientos(tratamiento.ID_Historial).First().ID_Historial.ToString());
-            return RedirectToAction("Index");
+            _historialRepo.ActualizarTratamiento(tratamiento);
+            return RedirectToAction("Index", new { dni = DNI_Paciente });
         }
     }
 }

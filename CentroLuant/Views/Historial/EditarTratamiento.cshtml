@@ -1,0 +1,47 @@
+﻿@model CentroLuant.Models.Tratamiento
+@{
+    ViewData["Title"] = "Editar Tratamiento";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0">Editar Tratamiento</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="EditarTratamiento" method="post">
+                        <input type="hidden" asp-for="ID_Tratamiento" />
+                        <input type="hidden" asp-for="ID_Historial" />
+                        <input type="hidden" name="DNI_Paciente" value="@ViewBag.DNI" />
+                        <div class="mb-3">
+                            <label class="form-label">Fecha</label>
+                            <input asp-for="FechaTratamiento" type="date" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de Tratamiento</label>
+                            <input asp-for="TipoTratamiento" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Diagnóstico</label>
+                            <textarea asp-for="Diagnostico" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Observaciones</label>
+                            <textarea asp-for="Observaciones" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Costo (S/)</label>
+                            <input asp-for="Costo" type="number" step="0.01" class="form-control" required />
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning">Guardar Cambios</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

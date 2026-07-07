@@ -104,5 +104,23 @@ namespace CentroLuant.Repositories
                     tratamiento.ID_Tratamiento
                 });
         }
+
+        public Tratamiento? ObtenerTratamientoPorId(int id)
+        {
+            using var db = _conexion.ObtenerConexion();
+            var r = db.QueryFirstOrDefault<dynamic>(
+                "SELECT * FROM Tratamiento WHERE ID_Tratamiento = @ID", new { ID = id });
+            if (r == null) return null;
+            return new Tratamiento
+            {
+                ID_Tratamiento = r.ID_Tratamiento,
+                ID_Historial = r.ID_Historial,
+                FechaTratamiento = DateOnly.FromDateTime((DateTime)r.FechaTratamiento),
+                Diagnostico = r.Diagnostico,
+                TipoTratamiento = r.TipoTratamiento,
+                Observaciones = r.Observaciones,
+                Costo = r.Costo
+            };
+        }
     }
 }
