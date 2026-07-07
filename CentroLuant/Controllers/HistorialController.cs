@@ -58,6 +58,7 @@ namespace CentroLuant.Controllers
             }
             historial.FechaCreacion = DateOnly.FromDateTime(DateTime.Now);
             _historialRepo.Crear(historial);
+            TempData["Exito"] = "Historial médico creado correctamente.";
             return RedirectToAction("Index", new { dni = historial.DNI_Paciente });
         }
 
@@ -65,6 +66,7 @@ namespace CentroLuant.Controllers
         public IActionResult AgregarTratamiento(Tratamiento tratamiento, string DNI_Paciente)
         {
             _historialRepo.RegistrarTratamiento(tratamiento);
+            TempData["Exito"] = "Tratamiento registrado correctamente.";
             return RedirectToAction("Index", new { dni = DNI_Paciente });
         }
 
@@ -79,6 +81,7 @@ namespace CentroLuant.Controllers
         public IActionResult EditarTratamiento(Tratamiento tratamiento, string DNI_Paciente)
         {
             _historialRepo.ActualizarTratamiento(tratamiento);
+            TempData["Exito"] = "Tratamiento actualizado correctamente.";
             return RedirectToAction("Index", new { dni = DNI_Paciente });
         }
     }

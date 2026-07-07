@@ -58,6 +58,7 @@ namespace CentroLuant.Controllers
         {
             factura.FechaEmision = DateOnly.FromDateTime(DateTime.Now);
             _facturaRepo.Registrar(factura);
+            TempData["Exito"] = "Factura generada correctamente.";
             var facturas = _facturaRepo.ObtenerPorPaciente(factura.DNI_Paciente);
             return RedirectToAction("Detalle", new { id = facturas.Last().ID_Factura });
         }
@@ -65,6 +66,7 @@ namespace CentroLuant.Controllers
         public IActionResult ActualizarEstado(int id, string estado)
         {
             _facturaRepo.ActualizarEstado(id, estado);
+            TempData["Exito"] = "Estado de factura actualizado correctamente.";
             return RedirectToAction("Index");
         }
 

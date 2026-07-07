@@ -44,6 +44,7 @@ namespace CentroLuant.Controllers
                 return View(paciente);
             }
             _pacienteRepo.Registrar(paciente);
+            TempData["Exito"] = $"Paciente {paciente.Nombres} {paciente.Apellidos} registrado correctamente.";
             return RedirectToAction("Index");
         }
 
@@ -58,12 +59,14 @@ namespace CentroLuant.Controllers
         public IActionResult Editar(Paciente paciente)
         {
             _pacienteRepo.Actualizar(paciente);
+            TempData["Exito"] = "Datos del paciente actualizados correctamente.";
             return RedirectToAction("Index");
         }
 
         public IActionResult Eliminar(string dni)
         {
             _pacienteRepo.Eliminar(dni);
+            TempData["Exito"] = "Paciente eliminado correctamente.";
             return RedirectToAction("Index");
         }
 

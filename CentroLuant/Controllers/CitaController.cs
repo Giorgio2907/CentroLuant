@@ -70,18 +70,17 @@ namespace CentroLuant.Controllers
                         especialista.NombreCompleto
                     );
                 }
-                catch
-                {
-                    // Si falla el correo no afecta el registro de la cita
-                }
+                catch { }
             }
 
+            TempData["Exito"] = "Cita registrada correctamente.";
             return RedirectToAction("Index");
         }
 
         public IActionResult Cancelar(int id)
         {
             _citaRepo.Cancelar(id);
+            TempData["Exito"] = "Cita cancelada correctamente.";
             return RedirectToAction("Index");
         }
 
@@ -96,6 +95,7 @@ namespace CentroLuant.Controllers
         public IActionResult Reprogramar(int id, DateOnly nuevaFecha, TimeOnly nuevaHora)
         {
             _citaRepo.Reprogramar(id, nuevaFecha, nuevaHora);
+            TempData["Exito"] = "Cita reprogramada correctamente.";
             return RedirectToAction("Index");
         }
     }

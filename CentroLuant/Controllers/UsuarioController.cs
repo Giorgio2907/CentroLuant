@@ -34,6 +34,7 @@ namespace CentroLuant.Controllers
                 return View(usuario);
             }
             _usuarioRepo.Registrar(usuario);
+            TempData["Exito"] = $"Usuario {usuario.NombreCompleto} creado correctamente.";
             return RedirectToAction("Index");
         }
 
@@ -48,12 +49,14 @@ namespace CentroLuant.Controllers
         public IActionResult Editar(Usuario usuario)
         {
             _usuarioRepo.Actualizar(usuario);
+            TempData["Exito"] = "Usuario actualizado correctamente.";
             return RedirectToAction("Index");
         }
 
         public IActionResult CambiarEstado(int id)
         {
             _usuarioRepo.CambiarEstado(id);
+            TempData["Exito"] = "Estado del usuario actualizado correctamente.";
             return RedirectToAction("Index");
         }
     }
