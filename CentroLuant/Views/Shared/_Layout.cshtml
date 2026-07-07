@@ -6,75 +6,278 @@
     <title>@ViewData["Title"] - Centro Odontológico Luant</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { display: flex; min-height: 100vh; background: #f0f4f8; font-family: 'Segoe UI', sans-serif; }
+
+            .sidebar {
+                width: 260px;
+                min-height: 100vh;
+                background: linear-gradient(180deg, #0d47a1 0%, #1a73e8 50%, #00838f 100%);
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                left: 0;
+                top: 0;
+                z-index: 100;
+                box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+            }
+
+            .sidebar-header {
+                padding: 25px 20px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                text-align: center;
+            }
+
+            .sidebar-header .logo-icon {
+                font-size: 2.5rem;
+                color: white;
+                display: block;
+                margin-bottom: 8px;
+            }
+
+            .sidebar-header h4 {
+                color: white;
+                font-size: 0.95rem;
+                font-weight: 700;
+                margin: 0;
+                line-height: 1.3;
+            }
+
+            .sidebar-header small {
+                color: rgba(255,255,255,0.6);
+                font-size: 0.75rem;
+            }
+
+            .sidebar-user {
+                padding: 15px 20px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .user-avatar {
+                width: 38px;
+                height: 38px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1.1rem;
+                flex-shrink: 0;
+            }
+
+            .user-info .name {
+                color: white;
+                font-size: 0.85rem;
+                font-weight: 600;
+                display: block;
+            }
+
+            .user-info .role {
+                color: rgba(255,255,255,0.6);
+                font-size: 0.75rem;
+            }
+
+            .sidebar-nav {
+                flex: 1;
+                padding: 15px 0;
+                overflow-y: auto;
+            }
+
+            .nav-section {
+                padding: 8px 20px 4px;
+                color: rgba(255,255,255,0.4);
+                font-size: 0.7rem;
+                font-weight: 700;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+
+            .nav-link-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 11px 20px;
+                color: rgba(255,255,255,0.8);
+                text-decoration: none;
+                font-size: 0.9rem;
+                transition: all 0.2s;
+                border-left: 3px solid transparent;
+            }
+
+            .nav-link-item:hover {
+                background: rgba(255,255,255,0.12);
+                color: white;
+                border-left-color: white;
+            }
+
+            .nav-link-item i {
+                font-size: 1.1rem;
+                width: 20px;
+                text-align: center;
+            }
+
+            .nav-link-item.active {
+                background: rgba(255,255,255,0.15);
+                color: white;
+                border-left-color: white;
+                font-weight: 600;
+            }
+
+            .nav-submenu {
+                background: rgba(0,0,0,0.1);
+            }
+
+            .nav-submenu .nav-link-item {
+                padding-left: 52px;
+                font-size: 0.85rem;
+            }
+
+            .sidebar-footer {
+                padding: 15px 20px;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .logout-btn {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: rgba(255,255,255,0.7);
+                text-decoration: none;
+                font-size: 0.9rem;
+                padding: 10px;
+                border-radius: 8px;
+                transition: all 0.2s;
+            }
+
+            .logout-btn:hover {
+                background: rgba(255,255,255,0.1);
+                color: white;
+            }
+
+            .main-content {
+                margin-left: 260px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+
+            .top-bar {
+                background: white;
+                padding: 12px 25px;
+                display: flex;
+                align-items: center;
+                justify-content: between;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                border-bottom: 1px solid #e8f0fe;
+            }
+
+            .page-title {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #0d47a1;
+                flex: 1;
+            }
+
+            .top-bar-date {
+                color: #888;
+                font-size: 0.85rem;
+            }
+
+            .content-area {
+                flex: 1;
+                padding: 5px;
+            }
+
+            .alert-container {
+                padding: 10px 20px 0;
+            }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
-                <i class="bi bi-heart-pulse"></i> Centro Odontológico Luant
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Index">
-                            <i class="bi bi-house"></i> Inicio
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Paciente" asp-action="Index">
-                            <i class="bi bi-people"></i> Pacientes
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-calendar"></i> Citas
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" asp-controller="Cita" asp-action="Index">Ver todas las citas</a></li>
-                            <li><a class="dropdown-item" asp-controller="Cita" asp-action="Consultar">Consultar por paciente</a></li>
-                            <li><a class="dropdown-item" asp-controller="Cita" asp-action="Registrar">Registrar cita</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Historial" asp-action="Index">
-                            <i class="bi bi-clipboard2-pulse"></i> Gestión Clínica
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Factura" asp-action="Index">
-                            <i class="bi bi-receipt"></i> Facturación
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Usuario" asp-action="Index">
-                            <i class="bi bi-person-gear"></i> Usuarios
-                        </a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <span class="nav-link text-white">
-                            <i class="bi bi-person-circle"></i> @Context.Session.GetString("Usuario")
-                            <span class="badge bg-light text-primary ms-1">@Context.Session.GetString("Rol")</span>
-                        </span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Account" asp-action="Logout">
-                            <i class="bi bi-box-arrow-right"></i> Salir
-                        </a>
-                    </li>
-                </ul>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="bi bi-hospital logo-icon"></i>
+            <h4>Centro Odontológico Luant</h4>
+            <small>Sistema de Gestión</small>
+        </div>
+
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="user-info">
+                <span class="name">@Context.Session.GetString("Usuario")</span>
+                <span class="role">@Context.Session.GetString("Rol")</span>
             </div>
         </div>
-    </nav>
 
-    <main class="py-3">
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="/Home/Index" class="nav-link-item">
+                <i class="bi bi-house-fill"></i> Inicio
+            </a>
+
+            <div class="nav-section">Módulos</div>
+            <a href="/Paciente/Index" class="nav-link-item">
+                <i class="bi bi-people-fill"></i> Pacientes
+            </a>
+
+            <div class="nav-link-item" style="cursor:pointer;"
+                 onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                <i class="bi bi-calendar2-check-fill"></i> Citas
+                <i class="bi bi-chevron-down ms-auto" style="font-size:0.8rem;"></i>
+            </div>
+            <div class="nav-submenu" style="display:none;">
+                <a href="/Cita/Index" class="nav-link-item">
+                    <i class="bi bi-list-ul"></i> Ver todas
+                </a>
+                <a href="/Cita/Consultar" class="nav-link-item">
+                    <i class="bi bi-search"></i> Consultar por paciente
+                </a>
+                <a href="/Cita/Registrar" class="nav-link-item">
+                    <i class="bi bi-plus-circle"></i> Registrar cita
+                </a>
+            </div>
+
+            <a href="/Historial/Index" class="nav-link-item">
+                <i class="bi bi-clipboard2-heart-fill"></i> Gestión Clínica
+            </a>
+
+            <a href="/Factura/Index" class="nav-link-item">
+                <i class="bi bi-receipt-cutoff"></i> Facturación
+            </a>
+
+            <div class="nav-section">Administración</div>
+            <a href="/Usuario/Index" class="nav-link-item">
+                <i class="bi bi-person-gear"></i> Usuarios
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="/Account/Logout" class="logout-btn">
+                <i class="bi bi-box-arrow-left"></i> Cerrar Sesión
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <span class="page-title">@ViewData["Title"]</span>
+            <span class="top-bar-date">
+                <i class="bi bi-calendar3 me-1"></i>
+                @DateTime.Now.ToString("dd/MM/yyyy")
+            </span>
+        </div>
+
         @if (TempData["Exito"] != null)
         {
-            <div class="container">
+            <div class="alert-container">
                 <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
                     <i class="bi bi-check-circle-fill"></i>
                     @TempData["Exito"]
@@ -84,7 +287,7 @@
         }
         @if (TempData["Error"] != null)
         {
-            <div class="container">
+            <div class="alert-container">
                 <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
                     <i class="bi bi-exclamation-triangle-fill"></i>
                     @TempData["Error"]
@@ -92,8 +295,11 @@
                 </div>
             </div>
         }
-        @RenderBody()
-    </main>
+
+        <div class="content-area">
+            @RenderBody()
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

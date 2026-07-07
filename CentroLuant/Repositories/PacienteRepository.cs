@@ -100,6 +100,11 @@ namespace CentroLuant.Repositories
         public void Eliminar(string dni)
         {
             using var db = _conexion.ObtenerConexion();
+            db.Execute("DELETE FROM Factura WHERE DNI_Paciente = @DNI", new { DNI = dni });
+            db.Execute("DELETE FROM Cita WHERE DNI_Paciente = @DNI", new { DNI = dni });
+            db.Execute(@"DELETE FROM Tratamiento WHERE ID_Historial IN 
+        (SELECT ID_Historial FROM Historial_Medico WHERE DNI_Paciente = @DNI)", new { DNI = dni });
+            db.Execute("DELETE FROM Historial_Medico WHERE DNI_Paciente = @DNI", new { DNI = dni });
             db.Execute("DELETE FROM Paciente WHERE DNI = @DNI", new { DNI = dni });
         }
         public int ContarPacientes()
