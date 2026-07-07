@@ -24,14 +24,13 @@ namespace CentroLuant.Repositories
         {
             using var db = _conexion.ObtenerConexion();
             return db.QueryFirstOrDefault<Usuario>(
-                "SELECT * FROM Usuario WHERE ID_Usuario = @Id",
-                new { Id = id });
+                "SELECT * FROM Usuario WHERE ID_Usuario = @ID", new { ID = id });
         }
 
         public IEnumerable<Usuario> ObtenerTodos()
         {
             using var db = _conexion.ObtenerConexion();
-            return db.Query<Usuario>("SELECT * FROM Usuario ORDER BY NombreCompleto");
+            return db.Query<Usuario>("SELECT * FROM Usuario");
         }
 
         public void Registrar(Usuario usuario)
@@ -39,49 +38,37 @@ namespace CentroLuant.Repositories
             using var db = _conexion.ObtenerConexion();
             db.Execute(@"
                 INSERT INTO Usuario (NombreCompleto, UsuarioLogin, ContrasenaHash, Rol, Activo)
-                VALUES (@NombreCompleto, @UsuarioLogin, @ContrasenaHash, @Rol, @Activo)", usuario);
+                VALUES (@NombreCompleto, @UsuarioLogin, @ContrasenaHash, @Rol, 1)", usuario);
         }
 
         public void Actualizar(Usuario usuario)
         {
             using var db = _conexion.ObtenerConexion();
-
-            // Si no se escribió una nueva contraseña, no la tocamos
-            if (!string.IsNullOrWhiteSpace(usuario.ContrasenaHash))
+            if (string.IsNullOrEmpty(usuario.ContrasenaHash))
             {
                 db.Execute(@"
-                    UPDATE Usuario
-                    SET NombreCompleto = @NombreCompleto,
-                        UsuarioLogin   = @UsuarioLogin,
-                        ContrasenaHash = @ContrasenaHash,
-                        Rol            = @Rol
+                    UPDATE Usuario SET 
+                        NombreCompleto = @NombreCompleto,
+                        Rol = @Rol
                     WHERE ID_Usuario = @ID_Usuario", usuario);
             }
             else
             {
                 db.Execute(@"
-                    UPDATE Usuario
-                    SET NombreCompleto = @NombreCompleto,
-                        UsuarioLogin   = @UsuarioLogin,
-                        Rol            = @Rol
+                    UPDATE Usuario SET 
+                        NombreCompleto = @NombreCompleto,
+                        ContrasenaHash = @ContrasenaHash,
+                        Rol = @Rol
                     WHERE ID_Usuario = @ID_Usuario", usuario);
             }
         }
 
-        public void CambiarEstado(int id, bool activo)
+        public void CambiarEstado(int id)
         {
             using var db = _conexion.ObtenerConexion();
-            db.Execute(
-                "UPDATE Usuario SET Activo = @Activo WHERE ID_Usuario = @Id",
-                new { Id = id, Activo = activo });
-        }
-
-        public bool ExisteLogin(string login, int idExcluir = 0)
-        {
-            using var db = _conexion.ObtenerConexion();
-            return db.ExecuteScalar<int>(
-                "SELECT COUNT(1) FROM Usuario WHERE UsuarioLogin = @Login AND ID_Usuario <> @Id",
-                new { Login = login, Id = idExcluir }) > 0;
+            db.Execute(@"
+                UPDATE Usuario SET Activo = CASE WHEN Activo = 1 THEN 0 ELSE 1 END
+                WHERE ID_Usuario = @ID", new { ID = id });
         }
     }
 }

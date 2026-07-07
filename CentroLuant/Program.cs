@@ -2,7 +2,10 @@ using CentroLuant.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<CentroLuant.Filters.LoginFilter>();
+});
 builder.Services.AddSingleton<ConexionBD>();
 builder.Services.AddScoped<CitaRepository>();
 builder.Services.AddScoped<PacienteRepository>();
@@ -14,7 +17,12 @@ builder.Services.AddHttpClient<CentroLuant.Services.DniService>();
 builder.Services.AddHttpClient<CentroLuant.Services.TipoCambioService>();
 builder.Services.AddScoped<CentroLuant.Services.FacturaPdfService>();
 builder.Services.AddScoped<CentroLuant.Services.CorreoService>();
-builder.Services.AddSession();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

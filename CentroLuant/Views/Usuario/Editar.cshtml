@@ -1,45 +1,46 @@
 ﻿@model CentroLuant.Models.Usuario
 @{
-    ViewData["Title"] = "Editar usuario";
+    ViewData["Title"] = "Editar Usuario";
 }
 
-<h3 class="mb-4">Editar usuario</h3>
-
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger">@ViewBag.Error</div>
-}
-
-<div class="card" style="max-width: 500px;">
-    <div class="card-body">
-        <form asp-action="Editar" method="post">
-            <input type="hidden" asp-for="ID_Usuario" />
-            <input type="hidden" asp-for="Activo" />
-
-            <div class="mb-3">
-                <label asp-for="NombreCompleto" class="form-label">Nombre completo</label>
-                <input asp-for="NombreCompleto" class="form-control" />
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0">Editar Usuario</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Editar" method="post">
+                        <input type="hidden" asp-for="ID_Usuario" />
+                        <div class="mb-3">
+                            <label class="form-label">Nombre Completo *</label>
+                            <input asp-for="NombreCompleto" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Usuario</label>
+                            <input asp-for="UsuarioLogin" class="form-control" readonly />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nueva Contraseña</label>
+                            <input asp-for="ContrasenaHash" type="password" class="form-control"
+                                   placeholder="Dejar vacío para mantener la actual" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Rol *</label>
+                            <select asp-for="Rol" class="form-select" required>
+                                <option value="Recepcionista">Recepcionista</option>
+                                <option value="Especialista">Especialista</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning">Actualizar</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-                <label asp-for="UsuarioLogin" class="form-label">Usuario</label>
-                <input asp-for="UsuarioLogin" class="form-control" />
-            </div>
-            <div class="mb-3">
-                <label asp-for="ContrasenaHash" class="form-label">Nueva contraseña</label>
-                <input asp-for="ContrasenaHash" type="password" class="form-control" placeholder="Dejar en blanco para no cambiarla" value="" />
-                <div class="form-text">Déjalo vacío si no quieres cambiar la contraseña actual.</div>
-            </div>
-            <div class="mb-4">
-                <label asp-for="Rol" class="form-label">Rol</label>
-                <select asp-for="Rol" class="form-select">
-                    <option value="Recepcionista">Recepcionista</option>
-                    <option value="Especialista">Especialista</option>
-                </select>
-            </div>
-            <div class="d-flex justify-content-end gap-2">
-                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
-                <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>

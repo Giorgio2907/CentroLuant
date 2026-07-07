@@ -137,5 +137,18 @@ namespace CentroLuant.Repositories
                     ID = id
                 });
         }
+        public int ContarCitas()
+        {
+            using var db = _conexion.ObtenerConexion();
+            return db.ExecuteScalar<int>("SELECT COUNT(*) FROM Cita");
+        }
+
+        public int ContarCitasHoy()
+        {
+            using var db = _conexion.ObtenerConexion();
+            return db.ExecuteScalar<int>(
+                "SELECT COUNT(*) FROM Cita WHERE Fecha = @Hoy AND Estado = 'Programada'",
+                new { Hoy = DateTime.Today });
+        }
     }
 }

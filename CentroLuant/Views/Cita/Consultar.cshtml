@@ -1,0 +1,67 @@
+﻿na@model IEnumerable<CentroLuant.Models.Cita>
+@{
+    ViewData["Title"] = "Consultar Citas";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-3">Consultar Citas por Paciente</h2>
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="get" class="d-flex gap-2">
+                <input type="text" name="dni" class="form-control"
+                       placeholder="Ingrese DNI del paciente" value="@ViewBag.DNI" />
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </form>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                Citas del paciente
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>#</th>
+                            <th>Especialista</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cita in Model)
+                        {
+                            <tr>
+                                <td>@cita.ID_Cita</td>
+                                <td>@cita.NombreEspecialista</td>
+                                <td>@cita.Fecha</td>
+                                <td>@cita.Hora</td>
+                                <td>
+                                    <span class="badge @(cita.Estado == "Programada" ? "bg-success" : cita.Estado == "Cancelada" ? "bg-danger" : "bg-warning")">
+                                        @cita.Estado
+                                    </span>
+                                </td>
+                                <td>
+                                    <a asp-action="Reprogramar" asp-route-id="@cita.ID_Cita"
+                                       class="btn btn-sm btn-warning">Reprogramar</a>
+                                    <a asp-action="Cancelar" asp-route-id="@cita.ID_Cita"
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('¿Cancelar esta cita?')">Cancelar</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else if (ViewBag.DNI != null)
+    {
+        <div class="alert alert-warning">No se encontraron citas para ese DNI.</div>
+    }
+</div>

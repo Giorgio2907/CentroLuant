@@ -102,5 +102,10 @@ namespace CentroLuant.Repositories
             using var db = _conexion.ObtenerConexion();
             db.Execute("DELETE FROM Paciente WHERE DNI = @DNI", new { DNI = dni });
         }
+        public int ContarPacientes()
+        {
+            using var db = _conexion.ObtenerConexion();
+            return db.ExecuteScalar<int>("SELECT COUNT(*) FROM Paciente");
+        }
     }
 }

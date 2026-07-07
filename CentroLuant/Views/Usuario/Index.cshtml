@@ -1,63 +1,50 @@
 ﻿@model IEnumerable<CentroLuant.Models.Usuario>
 @{
-    ViewData["Title"] = "Gestión de usuarios";
+    ViewData["Title"] = "Gestión de Usuarios";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="mb-0">Gestión de usuarios</h3>
-    <a asp-action="Crear" class="btn btn-primary">+ Nuevo usuario</a>
-</div>
-
-@if (TempData["Mensaje"] != null)
-{
-    <div class="alert alert-success">@TempData["Mensaje"]</div>
-}
-
-<div class="table-responsive">
-    <table class="table table-hover align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>Nombre completo</th>
-                <th>Usuario</th>
-                <th>Rol</th>
-                <th>Estado</th>
-                <th class="text-end">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var usuario in Model)
-            {
-                <tr>
-                    <td>@usuario.NombreCompleto</td>
-                    <td>@usuario.UsuarioLogin</td>
-                    <td>@usuario.Rol</td>
-                    <td>
-                        @if (usuario.Activo)
-                        {
-                            <span class="badge bg-success">Activo</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">Inactivo</span>
-                        }
-                    </td>
-                    <td class="text-end">
-                        <a asp-action="Editar" asp-route-id="@usuario.ID_Usuario" class="btn btn-sm btn-outline-primary me-1">Editar</a>
-                        <form asp-action="CambiarEstado" method="post" class="d-inline">
-                            <input type="hidden" name="id" value="@usuario.ID_Usuario" />
-                            <input type="hidden" name="activo" value="@usuario.Activo" />
-                            @if (usuario.Activo)
-                            {
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
-                            }
-                            else
-                            {
-                                <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
-                            }
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary">Gestión de Usuarios</h2>
+        <a asp-action="Crear" class="btn btn-primary">+ Crear Usuario</a>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var u in Model)
+                    {
+                        <tr>
+                            <td>@u.NombreCompleto</td>
+                            <td>@u.UsuarioLogin</td>
+                            <td>@u.Rol</td>
+                            <td>
+                                <span class="badge @(u.Activo ? "bg-success" : "bg-danger")">
+                                    @(u.Activo ? "Activo" : "Inactivo")
+                                </span>
+                            </td>
+                            <td>
+                                <a asp-action="Editar" asp-route-id="@u.ID_Usuario"
+                                   class="btn btn-sm btn-warning">Editar</a>
+                                <a asp-action="CambiarEstado" asp-route-id="@u.ID_Usuario"
+                                   class="btn btn-sm @(u.Activo ? "btn-danger" : "btn-success")"
+                                   onclick="return confirm('¿Cambiar estado del usuario?')">
+                                    @(u.Activo ? "Desactivar" : "Activar")
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

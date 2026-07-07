@@ -94,5 +94,11 @@ namespace CentroLuant.Repositories
             db.Execute("UPDATE Factura SET EstadoPago = @Estado WHERE ID_Factura = @ID",
                 new { Estado = estado, ID = id });
         }
+        public int ContarFacturasPendientes()
+        {
+            using var db = _conexion.ObtenerConexion();
+            return db.ExecuteScalar<int>(
+                "SELECT COUNT(*) FROM Factura WHERE EstadoPago = 'Pendiente'");
+        }
     }
 }
