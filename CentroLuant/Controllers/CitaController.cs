@@ -1,5 +1,6 @@
 ﻿using CentroLuant.Models;
 using CentroLuant.Repositories;
+using CentroLuant.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CentroLuant.Controllers
@@ -9,12 +10,15 @@ namespace CentroLuant.Controllers
         private readonly CitaRepository _citaRepo;
         private readonly PacienteRepository _pacienteRepo;
         private readonly EspecialistaRepository _especialistaRepo;
+        private readonly CorreoService _correoService;
 
-        public CitaController(CitaRepository citaRepo, PacienteRepository pacienteRepo, EspecialistaRepository especialistaRepo)
+        public CitaController(CitaRepository citaRepo, PacienteRepository pacienteRepo,
+            EspecialistaRepository especialistaRepo, CorreoService correoService)
         {
             _citaRepo = citaRepo;
             _pacienteRepo = pacienteRepo;
             _especialistaRepo = especialistaRepo;
+            _correoService = correoService;
         }
 
         public IActionResult Index()
@@ -39,7 +43,7 @@ namespace CentroLuant.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registrar(Cita cita)
+        public async Task<IActionResult> Registrar(Cita cita)
         {
             bool disponible = _citaRepo.VerificarDisponibilidad(cita.ID_Especialista, cita.Fecha, cita.Hora);
             if (!disponible)
@@ -48,7 +52,30 @@ namespace CentroLuant.Controllers
                 ViewBag.Especialistas = _especialistaRepo.ObtenerTodos();
                 return View(cita);
             }
+
             _citaRepo.Registrar(cita);
+
+            var paciente = _pacienteRepo.ObtenerPorDNI(cita.DNI_Paciente);
+            var especialista = _especialistaRepo.ObtenerPorId(cita.ID_Especialista);
+
+            if (paciente != null && !string.IsNullOrEmpty(paciente.CorreoElectronico) && especialista != null)
+            {
+                try
+                {
+                    await _correoService.EnviarRecordatorioCita(
+                        paciente.CorreoElectronico,
+                        paciente.NombreCompleto,
+                        cita.Fecha.ToString("dd/MM/yyyy"),
+                        cita.Hora.ToString("HH:mm"),
+                        especialista.NombreCompleto
+                    );
+                }
+                catch
+                {
+                    // Si falla el correo no afecta el registro de la cita
+                }
+            }
+
             return RedirectToAction("Index");
         }
 
