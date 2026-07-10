@@ -2,15 +2,132 @@
     ViewData["Title"] = "Acceso denegado";
 }
 
-<div class="d-flex flex-column align-items-center justify-content-center text-center py-5">
-    <div class="mb-3" style="font-size: 4rem; color: #dc3545;">
-        🚫
+<style>
+    .denied-wrapper {
+        min-height: calc(100vh - 60px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 25px;
+        background: #f0f4f8;
+    }
+
+    .denied-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        padding: 48px 40px;
+        text-align: center;
+        max-width: 460px;
+        width: 100%;
+    }
+
+    .denied-icon {
+        width: 88px;
+        height: 88px;
+        margin: 0 auto 22px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .denied-icon i {
+            font-size: 2.4rem;
+            color: #c62828;
+        }
+
+    .denied-card h2 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #0a2d6e;
+        margin-bottom: 10px;
+    }
+
+    .denied-card p {
+        color: #888;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 28px;
+    }
+
+    .denied-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-action-lg {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-volver-custom {
+        background: #f0f4f8;
+        color: #555;
+    }
+
+        .btn-volver-custom:hover {
+            background: #d8dee6;
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+    .btn-logout-custom {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+        .btn-logout-custom:hover {
+            background: #c62828;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(198,40,40,0.25);
+        }
+
+    @@media (max-width: 480px) {
+        .denied-card {
+            padding: 36px 24px;
+        }
+
+        .denied-actions {
+            flex-direction: column;
+        }
+
+        .btn-action-lg {
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="denied-wrapper">
+    <div class="denied-card">
+        <div class="denied-icon">
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+        <h2>Acceso denegado</h2>
+        <p>
+            Tu usuario no tiene permisos suficientes para ver esta sección.
+            Si crees que esto es un error, comunícate con el administrador del sistema.
+        </p>
+        <div class="denied-actions">
+            <a asp-controller="Home" asp-action="Index" class="btn-action-lg btn-volver-custom">
+                <i class="bi bi-house-door"></i> Volver al inicio
+            </a>
+            <a asp-controller="Account" asp-action="Logout" class="btn-action-lg btn-logout-custom">
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+            </a>
+        </div>
     </div>
-    <h2 class="mb-2" style="color: #dc3545;">Acceso denegado</h2>
-    <p class="text-muted mb-4" style="max-width: 420px;">
-        Tu usuario no tiene permisos suficientes para ver esta sección.
-        Si crees que esto es un error, comunícate con el administrador del sistema.
-    </p>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary me-2">Volver al inicio</a>
-    <a asp-controller="Account" asp-action="Logout" class="btn btn-outline-danger">Cerrar sesión</a>
 </div>

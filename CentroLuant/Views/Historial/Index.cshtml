@@ -3,124 +3,430 @@
     ViewData["Title"] = "Gestión Clínica";
 }
 
-<div class="container mt-4">
-    <h2 class="text-primary mb-3">Gestión Clínica</h2>
-    <div class="card mb-3">
-        <div class="card-body">
-            <form method="get" class="d-flex gap-2">
-                <input type="text" name="dni" class="form-control" placeholder="Ingrese DNI del paciente" />
-                <button type="submit" class="btn btn-primary">Buscar</button>
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a2d6e;
+            margin: 0;
+        }
+
+    .card-custom {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .search-bar {
+        padding: 18px 20px;
+    }
+
+        .search-bar form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+    .input-custom {
+        border: 2px solid #e8f0fe;
+        border-radius: 10px;
+        padding: 9px 15px;
+        font-size: 0.88rem;
+        flex: 1;
+        min-width: 220px;
+        outline: none;
+        transition: all 0.2s;
+        color: #333;
+    }
+
+        .input-custom:focus {
+            border-color: #0097a7;
+            background-color: #fff;
+        }
+
+    textarea.input-custom {
+        resize: vertical;
+        width: 100%;
+    }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #0097a7, #00acc1);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 9px 18px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,151,167,0.3);
+            color: white;
+        }
+
+    .alert-custom {
+        border-radius: 12px;
+        padding: 14px 18px;
+        font-size: 0.88rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .alert-error-custom {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+
+    .alert-warning-custom {
+        background: #fff8e1;
+        color: #8d6e00;
+        border: 1px solid #ffe9a8;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .historial-header {
+        background: linear-gradient(135deg, #0097a7, #00acc1);
+        color: white;
+        padding: 18px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+        .historial-header span {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .historial-header .historial-num {
+            background: rgba(255,255,255,0.18);
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+    .historial-body {
+        padding: 20px 24px;
+    }
+
+        .historial-body p {
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+            .historial-body p strong {
+                color: #0a2d6e;
+                font-weight: 700;
+            }
+
+            .historial-body p:last-child {
+                margin-bottom: 0;
+            }
+
+    .section-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f0f4f8;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #0a2d6e;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .section-header.tratamiento-form-header {
+            background: #f0fbfa;
+        }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table-custom th {
+            background: #f8faff;
+            color: #555;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px;
+            border-bottom: 2px solid #e8f0fe;
+            white-space: nowrap;
+        }
+
+        .table-custom td {
+            padding: 12px 16px;
+            font-size: 0.875rem;
+            color: #333;
+            border-bottom: 1px solid #f5f7ff;
+            vertical-align: middle;
+        }
+
+        .table-custom tr:hover td {
+            background: #f8faff;
+        }
+
+    .btn-action {
+        border: none;
+        border-radius: 7px;
+        padding: 5px 10px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-warning-custom {
+        background: #fff8e1;
+        color: #f57f17;
+    }
+
+        .btn-warning-custom:hover {
+            background: #f57f17;
+            color: white;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #aaa;
+        font-size: 0.9rem;
+    }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+    .form-label-custom {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #555;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-group-custom {
+        margin-bottom: 14px;
+    }
+
+    .btn-guardar-custom {
+        background: linear-gradient(135deg, #2e7d32, #43a047);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 10px 18px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+        .btn-guardar-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(46,125,50,0.3);
+        }
+
+    .clinica-grid {
+        display: grid;
+        grid-template-columns: 7fr 5fr;
+        gap: 18px;
+        align-items: start;
+    }
+
+    @@media (max-width: 900px) {
+        .clinica-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .table-custom th:nth-child(3),
+        .table-custom td:nth-child(3) {
+            display: none;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <h2><i class="bi bi-clipboard2-heart-fill me-2" style="color:#0097a7;"></i>Gestión Clínica</h2>
+    </div>  
+
+    <div class="card-custom mb-3">
+        <div class="search-bar">
+            <form method="get">
+                <input type="text" name="dni" class="input-custom" placeholder="Ingrese DNI del paciente" />
+                <button type="submit" class="btn-primary-custom">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
             </form>
         </div>
     </div>
 
     @if (ViewBag.Error != null)
     {
-        <div class="alert alert-danger">@ViewBag.Error</div>
+        <div class="alert-custom alert-error-custom">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>@ViewBag.Error</span>
+        </div>
     }
 
     @if (Model != null)
     {
-        <div class="card mb-3">
-            <div class="card-header bg-primary text-white d-flex justify-content-between">
-                <span>Paciente: @Model.NombrePaciente</span>
-                <span>Historial N° @Model.ID_Historial</span>
+        <div class="card-custom mb-3">
+            <div class="historial-header">
+                <span><i class="bi bi-person-fill me-1"></i>Paciente: @Model.NombrePaciente</span>
+                <span class="historial-num">Historial N° @Model.ID_Historial</span>
             </div>
-            <div class="card-body">
+            <div class="historial-body">
                 <p><strong>Fecha de Creación:</strong> @Model.FechaCreacion</p>
                 <p><strong>Observaciones Iniciales:</strong> @Model.ObservacionesIniciales</p>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-7">
-                <div class="card">
-                    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                        <span>Tratamientos Registrados</span>
-                    </div>
-                    <div class="card-body">
-                        @if (ViewBag.Tratamientos != null && (ViewBag.Tratamientos as IEnumerable<CentroLuant.Models.Tratamiento>).Any())
-                        {
-                            <table class="table table-hover">
-                                <thead>
+        <div class="clinica-grid">
+            <div class="card-custom">
+                <div class="section-header">
+                    <i class="bi bi-list-check"></i> Tratamientos Registrados
+                </div>
+                <div style="overflow-x:auto;">
+                    @if (ViewBag.Tratamientos != null && (ViewBag.Tratamientos as IEnumerable<CentroLuant.Models.Tratamiento>).Any())
+                    {
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Diagnóstico</th>
+                                    <th>Costo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var t in ViewBag.Tratamientos as IEnumerable<CentroLuant.Models.Tratamiento>)
+                                {
                                     <tr>
-                                        <th>Fecha</th>
-                                        <th>Tipo</th>
-                                        <th>Diagnóstico</th>
-                                        <th>Costo</th>
-                                        <th>Acciones</th>
+                                        <td>@t.FechaTratamiento</td>
+                                        <td style="font-weight:600;">@t.TipoTratamiento</td>
+                                        <td>@t.Diagnostico</td>
+                                        <td style="font-weight:700;color:#0097a7;">S/ @t.Costo</td>
+                                        <td>
+                                            <a asp-action="EditarTratamiento" asp-route-id="@t.ID_Tratamiento"
+                                               class="btn-action btn-warning-custom">
+                                                <i class="bi bi-pencil"></i> Editar
+                                            </a>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var t in ViewBag.Tratamientos as IEnumerable<CentroLuant.Models.Tratamiento>)
-                                    {
-                                        <tr>
-                                            <td>@t.FechaTratamiento</td>
-                                            <td>@t.TipoTratamiento</td>
-                                            <td>@t.Diagnostico</td>
-                                            <td>S/ @t.Costo</td>
-                                            <td>
-                                                <a asp-action="EditarTratamiento" asp-route-id="@t.ID_Tratamiento"
-                                                   class="btn btn-sm btn-warning">Editar</a>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        }
-                        else
-                        {
-                            <p class="text-muted">No hay tratamientos registrados.</p>
-                        }
-                    </div>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="bi bi-clipboard2-x"></i>
+                            No hay tratamientos registrados.
+                        </div>
+                    }
                 </div>
             </div>
 
-            <div class="col-md-5">
-                <div class="card">
-                    <div class="card-header bg-success text-white">
-                        Registrar Nuevo Tratamiento
-                    </div>
-                    <div class="card-body">
-                        <form asp-action="AgregarTratamiento" method="post">
-                            <input type="hidden" name="ID_Historial" value="@Model.ID_Historial" />
-                            <input type="hidden" name="DNI_Paciente" value="@Model.DNI_Paciente" />
-                            <div class="mb-2">
-                                <label class="form-label">Fecha</label>
-                                <input type="date" name="FechaTratamiento" class="form-control" required />
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">Tipo de Tratamiento</label>
-                                <input type="text" name="TipoTratamiento" class="form-control"
-                                       placeholder="Ej: Endodoncia, Profilaxis" required />
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">Diagnóstico</label>
-                                <textarea name="Diagnostico" class="form-control" rows="2"
-                                          placeholder="Diagnóstico resumido"></textarea>
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">Observaciones</label>
-                                <textarea name="Observaciones" class="form-control" rows="2"
-                                          placeholder="Notas clínicas relevantes"></textarea>
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">Costo (S/)</label>
-                                <input type="number" name="Costo" class="form-control"
-                                       step="0.01" placeholder="0.00" required />
-                            </div>
-                            <button type="submit" class="btn btn-success w-100">Guardar Tratamiento</button>
-                        </form>
-                    </div>
+            <div class="card-custom">
+                <div class="section-header tratamiento-form-header">
+                    <i class="bi bi-plus-circle" style="color:#2e7d32;"></i> Registrar Nuevo Tratamiento
+                </div>
+                <div class="historial-body">
+                    <form asp-action="AgregarTratamiento" method="post">
+                        <input type="hidden" name="ID_Historial" value="@Model.ID_Historial" />
+                        <input type="hidden" name="DNI_Paciente" value="@Model.DNI_Paciente" />
+
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">Fecha</label>
+                            <input type="date" name="FechaTratamiento" class="input-custom" required />
+                        </div>
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">Tipo de Tratamiento</label>
+                            <input type="text" name="TipoTratamiento" class="input-custom"
+                                   placeholder="Ej: Endodoncia, Profilaxis" required />
+                        </div>
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">Diagnóstico</label>
+                            <textarea name="Diagnostico" class="input-custom" rows="2"
+                                      placeholder="Diagnóstico resumido"></textarea>
+                        </div>
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">Observaciones</label>
+                            <textarea name="Observaciones" class="input-custom" rows="2"
+                                      placeholder="Notas clínicas relevantes"></textarea>
+                        </div>
+                        <div class="form-group-custom">
+                            <label class="form-label-custom">Costo (S/)</label>
+                            <input type="number" name="Costo" class="input-custom"
+                                   step="0.01" placeholder="0.00" required />
+                        </div>
+
+                        <button type="submit" class="btn-guardar-custom">
+                            <i class="bi bi-check-circle"></i> Guardar Tratamiento
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     }
     else if (ViewBag.Paciente != null)
     {
-        <div class="alert alert-warning">
-            El paciente no tiene historial clínico.
-            <a asp-action="Crear" asp-route-dni="@ViewBag.Paciente.DNI" class="btn btn-sm btn-primary ms-2">Crear Historial</a>
+        <div class="alert-custom alert-warning-custom">
+            <span><i class="bi bi-info-circle-fill me-1"></i>El paciente no tiene historial clínico.</span>
+            <a asp-action="Crear" asp-route-dni="@ViewBag.Paciente.DNI" class="btn-primary-custom">
+                <i class="bi bi-plus-lg"></i> Crear Historial
+            </a>
         </div>
     }
 </div>

@@ -3,32 +3,210 @@
     ViewData["Title"] = "Reprogramar Cita";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-warning">
-                    <h4 class="mb-0">Reprogramar Cita #@Model.ID_Cita</h4>
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+    }
+
+    .form-container {
+        max-width: 550px;
+        margin: 0 auto;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .form-card-header {
+        background: linear-gradient(135deg, #f57f17 0%, #ef6c00 100%);
+        padding: 22px 26px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .form-card-header h4 {
+            color: white;
+            font-weight: 800;
+            font-size: 1.15rem;
+            margin: 0;
+        }
+
+        .form-card-header i {
+            color: white;
+            font-size: 1.3rem;
+        }
+
+    .form-card-body {
+        padding: 26px 26px 28px;
+    }
+
+    .info-box {
+        background: #f8faff;
+        border: 1px solid #e8f0fe;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 22px;
+    }
+
+        .info-box p {
+            margin: 0;
+            font-size: 0.88rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .info-box p + p {
+                margin-top: 8px;
+            }
+
+        .info-box strong {
+            color: #0a2d6e;
+            font-weight: 700;
+            min-width: 95px;
+        }
+
+        .info-box i {
+            color: #f57f17;
+            font-size: 0.95rem;
+        }
+
+    .form-group-custom {
+        margin-bottom: 18px;
+    }
+
+    .form-label-custom {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #555;
+        margin-bottom: 7px;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        border: 2px solid #e8f0fe;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        background: #f8faff;
+        outline: none;
+        transition: all 0.2s;
+    }
+
+        .form-control-custom:focus {
+            border-color: #f57f17;
+            background: white;
+        }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .btn-warning-solid {
+        background: linear-gradient(135deg, #f57f17, #ef6c00);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 10px 22px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-warning-solid:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(245,127,23,0.35);
+            color: white;
+        }
+
+    .btn-secondary-custom {
+        background: #f0f4f8;
+        border: none;
+        border-radius: 10px;
+        color: #555;
+        padding: 10px 22px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #e2e8f0;
+            color: #333;
+        }
+
+    @@media (max-width: 600px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-warning-solid,
+        .btn-secondary-custom {
+            justify-content: center;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="form-container">
+        <div class="form-card">
+            <div class="form-card-header">
+                <i class="bi bi-calendar-event"></i>
+                <h4>Reprogramar Cita #@Model.ID_Cita</h4>
+            </div>
+            <div class="form-card-body">
+
+                <div class="info-box">
+                    <p><i class="bi bi-person-fill"></i><strong>Paciente:</strong> @Model.NombrePaciente</p>
+                    <p><i class="bi bi-clipboard2-heart"></i><strong>Especialista:</strong> @Model.NombreEspecialista</p>
                 </div>
-                <div class="card-body">
-                    <p><strong>Paciente:</strong> @Model.NombrePaciente</p>
-                    <p><strong>Especialista:</strong> @Model.NombreEspecialista</p>
-                    <form asp-action="Reprogramar" method="post">
-                        <input type="hidden" name="id" value="@Model.ID_Cita" />
-                        <div class="mb-3">
-                            <label class="form-label">Nueva Fecha</label>
-                            <input type="date" name="nuevaFecha" class="form-control" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nueva Hora</label>
-                            <input type="time" name="nuevaHora" class="form-control" required />
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-warning">Reprogramar</button>
-                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-                        </div>
-                    </form>
-                </div>
+
+                <form asp-action="Reprogramar" method="post">
+                    <input type="hidden" name="id" value="@Model.ID_Cita" />
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Nueva Fecha</label>
+                        <input type="date" name="nuevaFecha" class="form-control-custom" required />
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Nueva Hora</label>
+                        <input type="time" name="nuevaHora" class="form-control-custom" required />
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-warning-solid">
+                            <i class="bi bi-check-lg"></i> Reprogramar
+                        </button>
+                        <a asp-action="Index" class="btn-secondary-custom">
+                            <i class="bi bi-x-lg"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>

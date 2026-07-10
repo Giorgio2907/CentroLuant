@@ -3,52 +3,218 @@
     ViewData["Title"] = "Registrar Cita";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Registrar Nueva Cita</h4>
-                </div>
-                <div class="card-body">
-                    @if (!ViewData.ModelState.IsValid)
-                    {
-                        <div class="alert alert-danger">
-                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+    }
+
+    .form-container {
+        max-width: 550px;
+        margin: 0 auto;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .form-card-header {
+        background: linear-gradient(135deg, #1565c0 0%, #0097a7 100%);
+        padding: 22px 26px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .form-card-header h4 {
+            color: white;
+            font-weight: 800;
+            font-size: 1.15rem;
+            margin: 0;
+        }
+
+        .form-card-header i {
+            color: white;
+            font-size: 1.3rem;
+        }
+
+    .form-card-body {
+        padding: 28px 26px;
+    }
+
+    .form-group-custom {
+        margin-bottom: 18px;
+    }
+
+    .form-label-custom {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #555;
+        margin-bottom: 7px;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        border: 2px solid #e8f0fe;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        background: #f8faff;
+        outline: none;
+        transition: all 0.2s;
+    }
+
+        .form-control-custom:focus {
+            border-color: #1565c0;
+            background: white;
+        }
+
+    select.form-control-custom {
+        cursor: pointer;
+    }
+
+    .alert-custom-danger {
+        background: #ffebee;
+        color: #c62828;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 18px;
+        font-size: 0.85rem;
+    }
+
+        .alert-custom-danger p {
+            margin: 0;
+        }
+
+            .alert-custom-danger p + p {
+                margin-top: 4px;
+            }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #1565c0, #0097a7);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 10px 22px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(21,101,192,0.3);
+            color: white;
+        }
+
+    .btn-secondary-custom {
+        background: #f0f4f8;
+        border: none;
+        border-radius: 10px;
+        color: #555;
+        padding: 10px 22px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #e2e8f0;
+            color: #333;
+        }
+
+    @@media (max-width: 600px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-primary-custom,
+        .btn-secondary-custom {
+            justify-content: center;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="form-container">
+        <div class="form-card">
+            <div class="form-card-header">
+                <i class="bi bi-calendar2-plus-fill"></i>
+                <h4>Registrar Nueva Cita</h4>
+            </div>
+            <div class="form-card-body">
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert-custom-danger">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <p>@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
+
+                <form asp-action="Registrar" method="post">
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">DNI del Paciente</label>
+                        <input asp-for="DNI_Paciente" class="form-control-custom" placeholder="Ej: 12345678" required />
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Especialista</label>
+                        <select asp-for="ID_Especialista" class="form-control-custom" required>
+                            <option value="">-- Seleccione especialista --</option>
+                            @foreach (var e in ViewBag.Especialistas as IEnumerable<CentroLuant.Models.Especialista>)
                             {
-                                <p class="mb-0">@error.ErrorMessage</p>
+                                <option value="@e.ID_Especialista">@e.NombreCompleto - @e.Especialidad</option>
                             }
-                        </div>
-                    }
-                    <form asp-action="Registrar" method="post">
-                        <div class="mb-3">
-                            <label class="form-label">DNI del Paciente</label>
-                            <input asp-for="DNI_Paciente" class="form-control" placeholder="Ej: 12345678" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Especialista</label>
-                            <select asp-for="ID_Especialista" class="form-select" required>
-                                <option value="">-- Seleccione especialista --</option>
-                                @foreach (var e in ViewBag.Especialistas as IEnumerable<CentroLuant.Models.Especialista>)
-                                {
-                                    <option value="@e.ID_Especialista">@e.NombreCompleto - @e.Especialidad</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Fecha</label>
-                            <input asp-for="Fecha" type="date" class="form-control" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Hora</label>
-                            <input asp-for="Hora" type="time" class="form-control" required />
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">Guardar Cita</button>
-                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-                        </div>
-                    </form>
-                </div>
+                        </select>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Fecha</label>
+                        <input asp-for="Fecha" type="date" class="form-control-custom" required />
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Hora</label>
+                        <input asp-for="Hora" type="time" class="form-control-custom" required />
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary-custom">
+                            <i class="bi bi-check-lg"></i> Guardar Cita
+                        </button>
+                        <a asp-action="Index" class="btn-secondary-custom">
+                            <i class="bi bi-x-lg"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>

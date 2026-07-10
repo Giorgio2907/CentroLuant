@@ -3,29 +3,202 @@
     ViewData["Title"] = "Crear Historial";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Crear Historial Médico</h4>
-                </div>
-                <div class="card-body">
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .form-card-container {
+        width: 100%;
+        max-width: 520px;
+    }
+
+    .page-header-form {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .page-header-form h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a2d6e;
+            margin: 0;
+        }
+
+    .card-custom {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .historial-header {
+        background: linear-gradient(135deg, #0097a7, #00acc1);
+        color: white;
+        padding: 20px 26px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .historial-header h4 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+    .historial-body {
+        padding: 26px;
+    }
+
+    .paciente-info {
+        background: #f8faff;
+        border: 1px solid #e8f0fe;
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 22px;
+    }
+
+        .paciente-info p {
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+            .paciente-info p strong {
+                color: #0a2d6e;
+                font-weight: 700;
+            }
+
+            .paciente-info p:last-child {
+                margin-bottom: 0;
+            }
+
+    .form-label-custom {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .input-custom {
+        border: 2px solid #e8f0fe;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        width: 100%;
+        outline: none;
+        transition: all 0.2s;
+        color: #333;
+    }
+
+        .input-custom:focus {
+            border-color: #0097a7;
+            background-color: #fff;
+        }
+
+    textarea.input-custom {
+        resize: vertical;
+    }
+
+    .form-group-custom {
+        margin-bottom: 18px;
+    }
+
+    .acciones-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .btn-action-lg {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-crear-custom {
+        background: linear-gradient(135deg, #0097a7, #00acc1);
+        color: white;
+    }
+
+        .btn-crear-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,151,167,0.3);
+            color: white;
+        }
+
+    .btn-secondary-custom {
+        background: #f0f4f8;
+        color: #555;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #d8dee6;
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+    @@media (max-width: 600px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .historial-body {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="form-card-container">
+        <div class="page-header-form">
+            <h2><i class="bi bi-clipboard2-heart-fill me-2" style="color:#0097a7;"></i>Crear Historial Médico</h2>
+        </div>
+
+        <div class="card-custom">
+            <div class="historial-header">
+                <i class="bi bi-file-earmark-medical"></i>
+                <h4>Nuevo Historial</h4>
+            </div>
+
+            <div class="historial-body">
+                <div class="paciente-info">
                     <p><strong>Paciente:</strong> @ViewBag.Paciente.NombreCompleto</p>
                     <p><strong>DNI:</strong> @ViewBag.Paciente.DNI</p>
-                    <form asp-action="Crear" method="post">
-                        <input type="hidden" name="DNI_Paciente" value="@ViewBag.Paciente.DNI" />
-                        <div class="mb-3">
-                            <label class="form-label">Observaciones Iniciales</label>
-                            <textarea asp-for="ObservacionesIniciales" class="form-control" rows="4"
-                                      placeholder="Ej: Paciente derivado de otro centro, alergias conocidas, etc."></textarea>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">Crear Historial</button>
-                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-                        </div>
-                    </form>
                 </div>
+
+                <form asp-action="Crear" method="post">
+                    <input type="hidden" name="DNI_Paciente" value="@ViewBag.Paciente.DNI" />
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Observaciones Iniciales</label>
+                        <textarea asp-for="ObservacionesIniciales" class="input-custom" rows="4"
+                                  placeholder="Ej: Paciente derivado de otro centro, alergias conocidas, etc."></textarea>
+                    </div>
+
+                    <div class="acciones-row">
+                        <button type="submit" class="btn-action-lg btn-crear-custom">
+                            <i class="bi bi-check-circle"></i> Crear Historial
+                        </button>
+                        <a asp-action="Index" class="btn-action-lg btn-secondary-custom">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

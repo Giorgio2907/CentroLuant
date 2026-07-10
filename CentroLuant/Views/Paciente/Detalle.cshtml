@@ -3,25 +3,239 @@
     ViewData["Title"] = "Detalle Paciente";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    <h4 class="mb-0">@Model.NombreCompleto</h4>
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+    }
+
+    .form-container {
+        max-width: 550px;
+        margin: 0 auto;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .detail-header {
+        background: linear-gradient(135deg, #0097a7 0%, #00acc1 100%);
+        padding: 28px 26px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .avatar-circle-lg {
+        width: 58px;
+        height: 58px;
+        background: rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.4);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.4rem;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .detail-header h4 {
+        color: white;
+        font-weight: 800;
+        font-size: 1.2rem;
+        margin: 0;
+    }
+
+    .detail-header small {
+        color: rgba(255,255,255,0.8);
+        font-size: 0.82rem;
+    }
+
+    .form-card-body {
+        padding: 10px 26px 28px;
+    }
+
+    .detail-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f4f8;
+    }
+
+        .detail-row:last-of-type {
+            border-bottom: none;
+        }
+
+    .detail-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #f8faff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: #0097a7;
+        font-size: 1rem;
+    }
+
+    .detail-text .detail-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 2px;
+    }
+
+    .detail-text .detail-value {
+        font-size: 0.92rem;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .btn-warning-solid {
+        background: linear-gradient(135deg, #f57f17, #ef6c00);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 10px 22px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-warning-solid:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(245,127,23,0.35);
+            color: white;
+        }
+
+    .btn-secondary-custom {
+        background: #f0f4f8;
+        border: none;
+        border-radius: 10px;
+        color: #555;
+        padding: 10px 22px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #e2e8f0;
+            color: #333;
+        }
+
+    @@media (max-width: 600px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-warning-solid,
+        .btn-secondary-custom {
+            justify-content: center;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="form-container">
+        <div class="form-card">
+            <div class="detail-header">
+                <div class="avatar-circle-lg">
+                    @(Model.Nombres != null && Model.Nombres.Length > 0 ? Model.Nombres[0].ToString().ToUpper() : "?")
                 </div>
-                <div class="card-body">
-                    <p><strong>DNI:</strong> @Model.DNI</p>
-                    <p><strong>Fecha de Nacimiento:</strong> @Model.FechaNacimiento</p>
-                    <p><strong>Teléfono:</strong> @Model.Telefono</p>
-                    <p><strong>Correo:</strong> @Model.CorreoElectronico</p>
-                    <p><strong>Dirección:</strong> @Model.Direccion</p>
-                    <p><strong>Género:</strong> @Model.Genero</p>
-                    <div class="d-flex gap-2">
-                        <a asp-action="Editar" asp-route-dni="@Model.DNI" class="btn btn-warning">Editar</a>
-                        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                <div>
+                    <h4>@Model.NombreCompleto</h4>
+                    <small>Ficha del paciente</small>
+                </div>
+            </div>
+            <div class="form-card-body">
+
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-person-badge"></i></div>
+                    <div class="detail-text">
+                        <div class="detail-label">DNI</div>
+                        <div class="detail-value">@Model.DNI</div>
                     </div>
                 </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-cake2"></i></div>
+                    <div class="detail-text">
+                        <div class="detail-label">Fecha de Nacimiento</div>
+                        <div class="detail-value">@Model.FechaNacimiento</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-telephone"></i></div>
+                    <div class="detail-text">
+                        <div class="detail-label">Teléfono</div>
+                        <div class="detail-value">@Model.Telefono</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-envelope"></i></div>
+                    <div class="detail-text">
+                        <div class="detail-label">Correo</div>
+                        <div class="detail-value">@Model.CorreoElectronico</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-geo-alt"></i></div>
+                    <div class="detail-text">
+                        <div class="detail-label">Dirección</div>
+                        <div class="detail-value">@Model.Direccion</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="bi bi-gender-ambiguous"></i></div>
+                    <div class="detail-text">
+                        <div class="detail-label">Género</div>
+                        <div class="detail-value">@Model.Genero</div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a asp-action="Editar" asp-route-dni="@Model.DNI" class="btn-warning-solid">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a asp-action="Index" class="btn-secondary-custom">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>

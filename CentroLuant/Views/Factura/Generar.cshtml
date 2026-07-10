@@ -2,32 +2,206 @@
     ViewData["Title"] = "Generar Factura";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Generar Factura</h4>
-                </div>
-                <div class="card-body">
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .form-card-container {
+        width: 100%;
+        max-width: 520px;
+    }
+
+    .page-header-form {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .page-header-form h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a2d6e;
+            margin: 0;
+        }
+
+    .card-custom {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .factura-header {
+        background: linear-gradient(135deg, #e65100, #ef6c00);
+        color: white;
+        padding: 20px 26px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .factura-header h4 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+    .factura-body {
+        padding: 26px;
+    }
+
+    .paciente-info {
+        background: #f8faff;
+        border: 1px solid #e8f0fe;
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 22px;
+    }
+
+        .paciente-info p {
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+            .paciente-info p strong {
+                color: #0a2d6e;
+                font-weight: 700;
+            }
+
+            .paciente-info p:last-child {
+                margin-bottom: 0;
+            }
+
+    .form-label-custom {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .input-custom {
+        border: 2px solid #e8f0fe;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        width: 100%;
+        outline: none;
+        transition: all 0.2s;
+        color: #333;
+    }
+
+        .input-custom:focus {
+            border-color: #e65100;
+            background-color: #fff;
+        }
+
+    textarea.input-custom {
+        resize: vertical;
+    }
+
+    .form-group-custom {
+        margin-bottom: 18px;
+    }
+
+    .acciones-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .btn-action-lg {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-generar-custom {
+        background: linear-gradient(135deg, #e65100, #ef6c00);
+        color: white;
+    }
+
+        .btn-generar-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(230,81,0,0.3);
+            color: white;
+        }
+
+    .btn-secondary-custom {
+        background: #f0f4f8;
+        color: #555;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #d8dee6;
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+    @@media (max-width: 600px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .factura-body {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="form-card-container">
+        <div class="page-header-form">
+            <h2><i class="bi bi-receipt-cutoff me-2" style="color:#e65100;"></i>Generar Factura</h2>
+        </div>
+
+        <div class="card-custom">
+            <div class="factura-header">
+                <i class="bi bi-file-earmark-plus"></i>
+                <h4>Nueva Factura</h4>
+            </div>
+
+            <div class="factura-body">
+                <div class="paciente-info">
                     <p><strong>Paciente:</strong> @ViewBag.Paciente.NombreCompleto</p>
                     <p><strong>DNI:</strong> @ViewBag.Paciente.DNI</p>
-                    <form asp-action="Generar" method="post">
-                        <input type="hidden" name="DNI_Paciente" value="@ViewBag.Paciente.DNI" />
-                        <div class="mb-3">
-                            <label class="form-label">Descripción de Servicios</label>
-                            <textarea name="DescripcionServicios" class="form-control" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Monto Total (S/)</label>
-                            <input type="number" name="MontoTotal" class="form-control" step="0.01" required />
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">Generar Factura</button>
-                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-                        </div>
-                    </form>
                 </div>
+
+                <form asp-action="Generar" method="post">
+                    <input type="hidden" name="DNI_Paciente" value="@ViewBag.Paciente.DNI" />
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Descripción de Servicios</label>
+                        <textarea name="DescripcionServicios" class="input-custom" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Monto Total (S/)</label>
+                        <input type="number" name="MontoTotal" class="input-custom" step="0.01" required />
+                    </div>
+
+                    <div class="acciones-row">
+                        <button type="submit" class="btn-action-lg btn-generar-custom">
+                            <i class="bi bi-check-circle"></i> Generar Factura
+                        </button>
+                        <a asp-action="Index" class="btn-action-lg btn-secondary-custom">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

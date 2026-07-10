@@ -3,44 +3,191 @@
     ViewData["Title"] = "Editar Tratamiento";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-warning">
-                    <h4 class="mb-0">Editar Tratamiento</h4>
-                </div>
-                <div class="card-body">
-                    <form asp-action="EditarTratamiento" method="post">
-                        <input type="hidden" asp-for="ID_Tratamiento" />
-                        <input type="hidden" asp-for="ID_Historial" />
-                        <input type="hidden" name="DNI_Paciente" value="@ViewBag.DNI" />
-                        <div class="mb-3">
-                            <label class="form-label">Fecha</label>
-                            <input asp-for="FechaTratamiento" type="date" class="form-control" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tipo de Tratamiento</label>
-                            <input asp-for="TipoTratamiento" class="form-control" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Diagnóstico</label>
-                            <textarea asp-for="Diagnostico" class="form-control" rows="3"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Observaciones</label>
-                            <textarea asp-for="Observaciones" class="form-control" rows="3"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Costo (S/)</label>
-                            <input asp-for="Costo" type="number" step="0.01" class="form-control" required />
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-warning">Guardar Cambios</button>
-                            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-                        </div>
-                    </form>
-                </div>
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .form-card-container {
+        width: 100%;
+        max-width: 520px;
+    }
+
+    .page-header-form {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .page-header-form h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a2d6e;
+            margin: 0;
+        }
+
+    .card-custom {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .tratamiento-header {
+        background: linear-gradient(135deg, #0097a7, #00acc1);
+        color: white;
+        padding: 20px 26px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .tratamiento-header h4 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+    .tratamiento-body {
+        padding: 26px;
+    }
+
+    .form-label-custom {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .input-custom {
+        border: 2px solid #e8f0fe;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        width: 100%;
+        outline: none;
+        transition: all 0.2s;
+        color: #333;
+    }
+
+        .input-custom:focus {
+            border-color: #0097a7;
+            background-color: #fff;
+        }
+
+    textarea.input-custom {
+        resize: vertical;
+    }
+
+    .form-group-custom {
+        margin-bottom: 18px;
+    }
+
+    .acciones-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .btn-action-lg {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-guardar-custom {
+        background: linear-gradient(135deg, #0097a7, #00acc1);
+        color: white;
+    }
+
+        .btn-guardar-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,151,167,0.3);
+            color: white;
+        }
+
+    .btn-secondary-custom {
+        background: #f0f4f8;
+        color: #555;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #d8dee6;
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+    @@media (max-width: 600px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .tratamiento-body {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="form-card-container">
+        <div class="page-header-form">
+            <h2><i class="bi bi-clipboard2-heart-fill me-2" style="color:#0097a7;"></i>Editar Tratamiento</h2>
+        </div>
+
+        <div class="card-custom">
+            <div class="tratamiento-header">
+                <i class="bi bi-pencil-square"></i>
+                <h4>Actualizar datos del tratamiento</h4>
+            </div>
+
+            <div class="tratamiento-body">
+                <form asp-action="EditarTratamiento" method="post">
+                    <input type="hidden" asp-for="ID_Tratamiento" />
+                    <input type="hidden" asp-for="ID_Historial" />
+                    <input type="hidden" name="DNI_Paciente" value="@ViewBag.DNI" />
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Fecha</label>
+                        <input asp-for="FechaTratamiento" type="date" class="input-custom" required />
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Tipo de Tratamiento</label>
+                        <input asp-for="TipoTratamiento" class="input-custom" required />
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Diagnóstico</label>
+                        <textarea asp-for="Diagnostico" class="input-custom" rows="3"></textarea>
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Observaciones</label>
+                        <textarea asp-for="Observaciones" class="input-custom" rows="3"></textarea>
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Costo (S/)</label>
+                        <input asp-for="Costo" type="number" step="0.01" class="input-custom" required />
+                    </div>
+
+                    <div class="acciones-row">
+                        <button type="submit" class="btn-action-lg btn-guardar-custom">
+                            <i class="bi bi-check-circle"></i> Guardar Cambios
+                        </button>
+                        <a asp-action="Index" class="btn-action-lg btn-secondary-custom">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

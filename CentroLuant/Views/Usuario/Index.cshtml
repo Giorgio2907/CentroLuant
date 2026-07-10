@@ -3,15 +3,211 @@
     ViewData["Title"] = "Gestión de Usuarios";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-primary">Gestión de Usuarios</h2>
-        <a asp-action="Crear" class="btn btn-primary">+ Crear Usuario</a>
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a2d6e;
+            margin: 0;
+        }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #5e35b1, #7e57c2);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 9px 18px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(94,53,177,0.3);
+            color: white;
+        }
+
+    .card-custom {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table-custom th {
+            background: #f8faff;
+            color: #555;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px;
+            border-bottom: 2px solid #e8f0fe;
+            white-space: nowrap;
+        }
+
+        .table-custom td {
+            padding: 12px 16px;
+            font-size: 0.875rem;
+            color: #333;
+            border-bottom: 1px solid #f5f7ff;
+            vertical-align: middle;
+        }
+
+        .table-custom tr:hover td {
+            background: #f8faff;
+        }
+
+    .avatar-circle {
+        width: 34px;
+        height: 34px;
+        background: linear-gradient(135deg, #5e35b1, #7e57c2);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+
+    .usuario-name {
+        display: flex;
+        align-items: center;
+    }
+
+    .rol-badge {
+        background: #ede7f6;
+        color: #5e35b1;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .estado-badge {
+        border-radius: 20px;
+        padding: 5px 14px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .estado-activo {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .estado-inactivo {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .btn-action {
+        border: none;
+        border-radius: 7px;
+        padding: 5px 10px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-warning-custom {
+        background: #fff8e1;
+        color: #f57f17;
+    }
+
+        .btn-warning-custom:hover {
+            background: #f57f17;
+            color: white;
+        }
+
+    .btn-danger-custom {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+        .btn-danger-custom:hover {
+            background: #c62828;
+            color: white;
+        }
+
+    .btn-success-custom {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+        .btn-success-custom:hover {
+            background: #2e7d32;
+            color: white;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #aaa;
+    }
+
+        .empty-state i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+    @@media (max-width: 768px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .table-custom th:nth-child(2),
+        .table-custom td:nth-child(2) {
+            display: none;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <h2><i class="bi bi-person-badge-fill me-2" style="color:#5e35b1;"></i>Gestión de Usuarios</h2>
+        <a asp-action="Crear" class="btn-primary-custom">
+            <i class="bi bi-plus-lg"></i> Crear Usuario
+        </a>
     </div>
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-hover">
-                <thead class="table-primary">
+
+    <div class="card-custom">
+        <div style="overflow-x:auto;">
+            <table class="table-custom">
+                <thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Usuario</th>
@@ -21,25 +217,51 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var u in Model)
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var u in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="usuario-name">
+                                        <div class="avatar-circle">
+                                            @(u.NombreCompleto.Length > 0 ? u.NombreCompleto[0].ToString().ToUpper() : "?")
+                                        </div>
+                                        <div style="font-weight:600;">@u.NombreCompleto</div>
+                                    </div>
+                                </td>
+                                <td><span style="font-family:monospace;">@u.UsuarioLogin</span></td>
+                                <td><span class="rol-badge">@u.Rol</span></td>
+                                <td>
+                                    <span class="estado-badge @(u.Activo ? "estado-activo" : "estado-inactivo")">
+                                        @(u.Activo ? "Activo" : "Inactivo")
+                                    </span>
+                                </td>
+                                <td>
+                                    <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                                        <a asp-action="Editar" asp-route-id="@u.ID_Usuario"
+                                           class="btn-action btn-warning-custom">
+                                            <i class="bi bi-pencil"></i> Editar
+                                        </a>
+                                        <a asp-action="CambiarEstado" asp-route-id="@u.ID_Usuario"
+                                           class="btn-action @(u.Activo ? "btn-danger-custom" : "btn-success-custom")"
+                                           onclick="return confirm('¿Cambiar estado del usuario?')">
+                                            <i class="bi @(u.Activo ? "bi-slash-circle" : "bi-check-circle")"></i>
+                                            @(u.Activo ? "Desactivar" : "Activar")
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td>@u.NombreCompleto</td>
-                            <td>@u.UsuarioLogin</td>
-                            <td>@u.Rol</td>
-                            <td>
-                                <span class="badge @(u.Activo ? "bg-success" : "bg-danger")">
-                                    @(u.Activo ? "Activo" : "Inactivo")
-                                </span>
-                            </td>
-                            <td>
-                                <a asp-action="Editar" asp-route-id="@u.ID_Usuario"
-                                   class="btn btn-sm btn-warning">Editar</a>
-                                <a asp-action="CambiarEstado" asp-route-id="@u.ID_Usuario"
-                                   class="btn btn-sm @(u.Activo ? "btn-danger" : "btn-success")"
-                                   onclick="return confirm('¿Cambiar estado del usuario?')">
-                                    @(u.Activo ? "Desactivar" : "Activar")
-                                </a>
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <i class="bi bi-person-badge"></i>
+                                    No hay usuarios registrados aún.
+                                </div>
                             </td>
                         </tr>
                     }

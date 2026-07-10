@@ -3,64 +3,315 @@
     ViewData["Title"] = "Detalle Factura";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-7">
-            <div class="card">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-receipt me-2"></i>Factura #@Model.ID_Factura</span>
-                    <span class="badge @(Model.EstadoPago == "Pagado" ? "bg-success" : "bg-warning text-dark")">
-                        @Model.EstadoPago
-                    </span>
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a2d6e;
+            margin: 0;
+        }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #1565c0, #0097a7);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 9px 18px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(21,101,192,0.3);
+            color: white;
+        }
+
+    .btn-action-lg {
+        border: none;
+        border-radius: 10px;
+        padding: 9px 18px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-success-custom {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+        .btn-success-custom:hover {
+            background: #2e7d32;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(46,125,50,0.25);
+        }
+
+    .btn-danger-custom-lg {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+        .btn-danger-custom-lg:hover {
+            background: #c62828;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(198,40,40,0.25);
+        }
+
+    .btn-secondary-custom {
+        background: #f0f4f8;
+        color: #555;
+    }
+
+        .btn-secondary-custom:hover {
+            background: #d8dee6;
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+    .card-custom {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .factura-header {
+        background: linear-gradient(135deg, #e65100, #ef6c00);
+        color: white;
+        padding: 22px 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .factura-header .factura-num {
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+    .estado-badge {
+        border-radius: 20px;
+        padding: 6px 16px;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .estado-pagado {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .estado-pendiente {
+        background: #fff8e1;
+        color: #f57f17;
+    }
+
+    .factura-body {
+        padding: 26px;
+    }
+
+    .info-block p {
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+        .info-block p strong {
+            color: #0a2d6e;
+            font-weight: 700;
+        }
+
+    .tipo-cambio-box {
+        background: #f8faff;
+        border: 1px solid #e8f0fe;
+        border-radius: 12px;
+        padding: 12px 16px;
+        text-align: right;
+    }
+
+        .tipo-cambio-box small {
+            display: block;
+            color: #888;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .tipo-cambio-box strong {
+            color: #0097a7;
+            font-size: 0.95rem;
+        }
+
+    .section-divider {
+        border: none;
+        border-top: 1px solid #f0f4f8;
+        margin: 22px 0;
+    }
+
+    .servicios-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #999;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .servicios-text {
+        color: #555;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .totales-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .total-item {
+        text-align: right;
+    }
+
+        .total-item .total-label {
+            font-size: 0.78rem;
+            color: #999;
+            margin-bottom: 2px;
+        }
+
+        .total-item .total-usd {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #888;
+        }
+
+        .total-item .total-final {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #e65100;
+        }
+
+    .acciones-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 26px;
+    }
+
+    @@media (max-width: 600px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .totales-row {
+            justify-content: space-between;
+        }
+
+        .factura-body {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <h2><i class="bi bi-receipt-cutoff me-2" style="color:#e65100;"></i>Detalle de Factura</h2>
+        <a asp-action="Index" class="btn-action-lg btn-secondary-custom">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <div class="card-custom">
+        <div class="factura-header">
+            <div class="factura-num">
+                <i class="bi bi-receipt"></i> Factura #@Model.ID_Factura
+            </div>
+            <span class="estado-badge @(Model.EstadoPago == "Pagado" ? "estado-pagado" : "estado-pendiente")">
+                @Model.EstadoPago
+            </span>
+        </div>
+
+        <div class="factura-body">
+            <div class="row mb-2">
+                <div class="col-md-6 info-block">
+                    <p><strong>Paciente:</strong> @Model.NombrePaciente</p>
+                    <p><strong>DNI:</strong> @Model.DNI_Paciente</p>
+                    <p><strong>Fecha de Emisión:</strong> @Model.FechaEmision</p>
                 </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            <p class="mb-1"><strong>Paciente:</strong> @Model.NombrePaciente</p>
-                            <p class="mb-1"><strong>DNI:</strong> @Model.DNI_Paciente</p>
-                            <p class="mb-1"><strong>Fecha de Emisión:</strong> @Model.FechaEmision</p>
-                        </div>
-                        <div class="col-6 text-end">
-                            <div class="alert alert-info py-2 mb-0">
-                                <small class="d-block text-muted">Tipo de cambio (API)</small>
-                                <strong>1 USD = S/ @(1 / ViewBag.TipoCambio)</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr />
-
-                    <p><strong>Descripción de Servicios:</strong></p>
-                    <p class="text-muted">@Model.DescripcionServicios</p>
-
-                    <hr />
-
-                    <div class="d-flex justify-content-end gap-4 align-items-center">
-                        <div class="text-end">
-                            <p class="mb-0 text-muted small">Monto en USD</p>
-                            <h6 class="text-muted">$ @ViewBag.MontoUSD</h6>
-                        </div>
-                        <div class="text-end">
-                            <p class="mb-0 text-muted small">Total a pagar</p>
-                            <h4 class="text-primary fw-bold">S/ @Model.MontoTotal</h4>
-                        </div>
-                    </div>
-
-                    <div class="d-flex gap-2 mt-4">
-                        @if (Model.EstadoPago == "Pendiente")
-                        {
-                            <a asp-action="ActualizarEstado" asp-route-id="@Model.ID_Factura"
-                               asp-route-estado="Pagado" class="btn btn-success">
-                                <i class="bi bi-check-circle"></i> Marcar como Pagado
-                            </a>
-                        }
-                        <a asp-action="DescargarPdf" asp-route-id="@Model.ID_Factura"
-                           class="btn btn-danger">
-                            <i class="bi bi-file-pdf"></i> Descargar PDF
-                        </a>
-                        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                <div class="col-md-6 d-flex align-items-start justify-content-md-end mt-3 mt-md-0">
+                    <div class="tipo-cambio-box">
+                        <small>Tipo de cambio</small>
+                        <strong>1 USD = S/ @(1 / ViewBag.TipoCambio)</strong>
                     </div>
                 </div>
+            </div>
+
+            <hr class="section-divider" />
+
+            <p class="servicios-label">Descripción de Servicios</p>
+            <p class="servicios-text">@Model.DescripcionServicios</p>
+
+            <hr class="section-divider" />
+
+            <div class="totales-row">
+                <div class="total-item">
+                    <div class="total-label">Monto en USD</div>
+                    <div class="total-usd">$ @ViewBag.MontoUSD</div>
+                </div>
+                <div class="total-item">
+                    <div class="total-label">Total a pagar</div>
+                    <div class="total-final">S/ @Model.MontoTotal</div>
+                </div>
+            </div>
+
+            <div class="acciones-row">
+                @if (Model.EstadoPago == "Pendiente")
+                {
+                    <a asp-action="ActualizarEstado" asp-route-id="@Model.ID_Factura"
+                       asp-route-estado="Pagado" class="btn-action-lg btn-success-custom">
+                        <i class="bi bi-check-circle"></i> Marcar como Pagado
+                    </a>
+                }
+                <a asp-action="DescargarPdf" asp-route-id="@Model.ID_Factura"
+                   class="btn-action-lg btn-danger-custom-lg">
+                    <i class="bi bi-file-pdf"></i> Descargar PDF
+                </a>
             </div>
         </div>
     </div>

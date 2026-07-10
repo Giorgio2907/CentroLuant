@@ -3,27 +3,236 @@
     ViewData["Title"] = "Consultar Citas";
 }
 
-<div class="container mt-4">
-    <h2 class="text-primary mb-3">Consultar Citas por Paciente</h2>
-    <div class="card mb-3">
-        <div class="card-body">
-            <form method="get" class="d-flex gap-2">
-                <input type="text" name="dni" class="form-control"
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a2d6e;
+            margin: 0;
+        }
+
+    .card-custom {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .search-bar {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f0f4f8;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        border: 2px solid #e8f0fe;
+        border-radius: 10px;
+        padding: 9px 15px;
+        font-size: 0.88rem;
+        width: 250px;
+        outline: none;
+        transition: all 0.2s;
+        background: #f8faff;
+    }
+
+        .search-input:focus {
+            border-color: #1565c0;
+            background: white;
+        }
+
+    .btn-search {
+        background: #1565c0;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 9px 16px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .results-header {
+        padding: 14px 20px;
+        background: #f8faff;
+        border-bottom: 2px solid #e8f0fe;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #0a2d6e;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table-custom th {
+            background: #f8faff;
+            color: #555;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px;
+            border-bottom: 2px solid #e8f0fe;
+            white-space: nowrap;
+        }
+
+        .table-custom td {
+            padding: 12px 16px;
+            font-size: 0.875rem;
+            color: #333;
+            border-bottom: 1px solid #f5f7ff;
+            vertical-align: middle;
+        }
+
+        .table-custom tr:hover td {
+            background: #f8faff;
+        }
+
+    .badge-estado {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .badge-programada {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .badge-cancelada {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .badge-completada {
+        background: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .btn-action {
+        border: none;
+        border-radius: 7px;
+        padding: 5px 10px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-warning-custom {
+        background: #fff8e1;
+        color: #f57f17;
+    }
+
+        .btn-warning-custom:hover {
+            background: #f57f17;
+            color: white;
+        }
+
+    .btn-danger-custom {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+        .btn-danger-custom:hover {
+            background: #c62828;
+            color: white;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #aaa;
+    }
+
+        .empty-state i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .empty-state.warning {
+            color: #f57f17;
+        }
+
+            .empty-state.warning i {
+                color: #ffca28;
+            }
+
+    @@media (max-width: 768px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .table-custom th:nth-child(2),
+        .table-custom td:nth-child(2) {
+            display: none;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <h2>
+            <i class="bi bi-search-heart me-2" style="color:#2e7d32;"></i>
+            Consultar Citas por Paciente
+        </h2>
+    </div>
+
+    <div class="card-custom" style="margin-bottom:20px;">
+        <div class="search-bar">
+            <form method="get" style="display:flex;gap:10px;flex-wrap:wrap;width:100%;">
+                <input type="text" name="dni" class="search-input"
                        placeholder="Ingrese DNI del paciente" value="@ViewBag.DNI" />
-                <button type="submit" class="btn btn-primary">Buscar</button>
+                <button type="submit" class="btn-search">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
             </form>
         </div>
     </div>
 
     @if (Model != null && Model.Count() > 0)
     {
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                Citas del paciente
+        <div class="card-custom">
+            <div class="results-header">
+                <i class="bi bi-calendar2-check-fill"></i> Citas del paciente
             </div>
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead class="table-primary">
+
+            <div style="overflow-x:auto;">
+                <table class="table-custom">
+                    <thead>
                         <tr>
                             <th>#</th>
                             <th>Especialista</th>
@@ -37,21 +246,27 @@
                         @foreach (var cita in Model)
                         {
                             <tr>
-                                <td>@cita.ID_Cita</td>
+                                <td><span style="font-weight:700;color:#1565c0;">#@cita.ID_Cita</span></td>
                                 <td>@cita.NombreEspecialista</td>
-                                <td>@cita.Fecha</td>
-                                <td>@cita.Hora</td>
+                                <td><i class="bi bi-calendar3 me-1 text-muted"></i>@cita.Fecha</td>
+                                <td><i class="bi bi-clock me-1 text-muted"></i>@cita.Hora</td>
                                 <td>
-                                    <span class="badge @(cita.Estado == "Programada" ? "bg-success" : cita.Estado == "Cancelada" ? "bg-danger" : "bg-warning")">
+                                    <span class="badge-estado @(cita.Estado == "Programada" ? "badge-programada" : cita.Estado == "Cancelada" ? "badge-cancelada" : "badge-completada")">
                                         @cita.Estado
                                     </span>
                                 </td>
                                 <td>
-                                    <a asp-action="Reprogramar" asp-route-id="@cita.ID_Cita"
-                                       class="btn btn-sm btn-warning">Reprogramar</a>
-                                    <a asp-action="Cancelar" asp-route-id="@cita.ID_Cita"
-                                       class="btn btn-sm btn-danger"
-                                       onclick="return confirm('¿Cancelar esta cita?')">Cancelar</a>
+                                    <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                                        <a asp-action="Reprogramar" asp-route-id="@cita.ID_Cita"
+                                           class="btn-action btn-warning-custom">
+                                            <i class="bi bi-calendar-event"></i> Reprogramar
+                                        </a>
+                                        <a asp-action="Cancelar" asp-route-id="@cita.ID_Cita"
+                                           class="btn-action btn-danger-custom"
+                                           onclick="return confirm('¿Cancelar esta cita?')">
+                                            <i class="bi bi-x-circle"></i> Cancelar
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -62,6 +277,12 @@
     }
     else if (ViewBag.DNI != null)
     {
-        <div class="alert alert-warning">No se encontraron citas para ese DNI.</div>
+        <div class="card-custom">
+            <div class="empty-state warning">
+                <i class="bi bi-exclamation-circle"></i>
+                No se encontraron citas para ese DNI.
+            </div>
+        </div>
     }
+
 </div>
