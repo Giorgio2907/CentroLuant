@@ -3,38 +3,269 @@
     ViewData["Title"] = "Gestión de Pacientes";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-primary">Gestión de Pacientes</h2>
-        <a asp-action="Registrar" class="btn btn-primary">+ Registrar Paciente</a>
+<style>
+    .page-wrapper {
+        padding: 20px 25px;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a2d6e;
+            margin: 0;
+        }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #1565c0, #0097a7);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 9px 18px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(21,101,192,0.3);
+            color: white;
+        }
+
+    .card-custom {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .search-bar {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f0f4f8;
+    }
+
+    .search-input {
+        border: 2px solid #e8f0fe;
+        border-radius: 10px;
+        padding: 9px 15px 9px 38px;
+        font-size: 0.88rem;
+        width: 280px;
+        outline: none;
+        transition: all 0.2s;
+        background: #f8faff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%231565c0' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E") no-repeat 12px center;
+    }
+
+        .search-input:focus {
+            border-color: #1565c0;
+            background-color: white;
+        }
+
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table-custom th {
+            background: #f8faff;
+            color: #555;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px;
+            border-bottom: 2px solid #e8f0fe;
+            white-space: nowrap;
+        }
+
+        .table-custom td {
+            padding: 12px 16px;
+            font-size: 0.875rem;
+            color: #333;
+            border-bottom: 1px solid #f5f7ff;
+            vertical-align: middle;
+        }
+
+        .table-custom tr:hover td {
+            background: #f8faff;
+        }
+
+    .avatar-circle {
+        width: 34px;
+        height: 34px;
+        background: linear-gradient(135deg, #1565c0, #0097a7);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+
+    .patient-name {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-action {
+        border: none;
+        border-radius: 7px;
+        padding: 5px 10px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-info-custom {
+        background: #e3f2fd;
+        color: #1565c0;
+    }
+
+        .btn-info-custom:hover {
+            background: #1565c0;
+            color: white;
+        }
+
+    .btn-warning-custom {
+        background: #fff8e1;
+        color: #f57f17;
+    }
+
+        .btn-warning-custom:hover {
+            background: #f57f17;
+            color: white;
+        }
+
+    .btn-danger-custom {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+        .btn-danger-custom:hover {
+            background: #c62828;
+            color: white;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #aaa;
+    }
+
+        .empty-state i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+    @@media (max-width: 768px) {
+        .page-wrapper {
+            padding: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .table-custom th:nth-child(3),
+        .table-custom td:nth-child(3),
+        .table-custom th:nth-child(4),
+        .table-custom td:nth-child(4) {
+            display: none;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <h2><i class="bi bi-people-fill me-2" style="color:#1565c0;"></i>Gestión de Pacientes</h2>
+        <a asp-action="Registrar" class="btn-primary-custom">
+            <i class="bi bi-plus-lg"></i> Nuevo Paciente
+        </a>
     </div>
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-hover">
-                <thead class="table-primary">
+
+    <div class="card-custom">
+        <div class="search-bar">
+            <input type="text" class="search-input" id="searchInput"
+                   placeholder="Buscar paciente..." onkeyup="filtrarTabla()" />
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="table-custom" id="tablaP">
+                <thead>
                     <tr>
+                        <th>Paciente</th>
                         <th>DNI</th>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
                         <th>Teléfono</th>
                         <th>Correo</th>
+                        <th>Género</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var p in Model)
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var p in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="patient-name">
+                                        <div class="avatar-circle">
+                                            @(p.Nombres.Length > 0 ? p.Nombres[0].ToString().ToUpper() : "?")
+                                        </div>
+                                        <div>
+                                            <div style="font-weight:600;">@p.NombreCompleto</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span style="font-family:monospace;font-weight:600;">@p.DNI</span></td>
+                                <td>@(p.Telefono ?? "-")</td>
+                                <td>@(p.CorreoElectronico ?? "-")</td>
+                                <td>@(p.Genero ?? "-")</td>
+                                <td>
+                                    <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                                        <a asp-action="Detalle" asp-route-dni="@p.DNI" class="btn-action btn-info-custom">
+                                            <i class="bi bi-eye"></i> Ver
+                                        </a>
+                                        <a asp-action="Editar" asp-route-dni="@p.DNI" class="btn-action btn-warning-custom">
+                                            <i class="bi bi-pencil"></i> Editar
+                                        </a>
+                                        <a asp-action="Eliminar" asp-route-dni="@p.DNI" class="btn-action btn-danger-custom"
+                                           onclick="return confirm('¿Eliminar paciente y todos sus registros?')">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td>@p.DNI</td>
-                            <td>@p.Nombres</td>
-                            <td>@p.Apellidos</td>
-                            <td>@p.Telefono</td>
-                            <td>@p.CorreoElectronico</td>
-                            <td>
-                                <a asp-action="Detalle" asp-route-dni="@p.DNI" class="btn btn-sm btn-info">Ver</a>
-                                <a asp-action="Editar" asp-route-dni="@p.DNI" class="btn btn-sm btn-warning">Editar</a>
-                                <a asp-action="Eliminar" asp-route-dni="@p.DNI" class="btn btn-sm btn-danger"
-                                   onclick="return confirm('¿Eliminar paciente?')">Eliminar</a>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <i class="bi bi-people"></i>
+                                    No hay pacientes registrados aún.
+                                </div>
                             </td>
                         </tr>
                     }
@@ -43,3 +274,15 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function filtrarTabla() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#tablaP tbody tr');
+            rows.forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(input) ? '' : 'none';
+            });
+        }
+    </script>
+}

@@ -21,210 +21,401 @@
             body {
                 min-height: 100vh;
                 display: flex;
-                align-items: center;
-                justify-content: center;
-                background: linear-gradient(135deg, #0a0a2e, #0d1b4b, #0a3d6b);
-                overflow: hidden;
+                font-family: 'Segoe UI', sans-serif;
+                background: #f0f7ff;
             }
 
-            .bubble {
-                position: fixed;
-                border-radius: 50%;
-                background: rgba(26, 115, 232, 0.15);
-                animation: float 8s infinite ease-in-out;
-            }
-
-                .bubble:nth-child(1) {
-                    width: 300px;
-                    height: 300px;
-                    top: -100px;
-                    left: -100px;
-                    animation-delay: 0s;
-                }
-
-                .bubble:nth-child(2) {
-                    width: 200px;
-                    height: 200px;
-                    bottom: -50px;
-                    right: -50px;
-                    animation-delay: 2s;
-                }
-
-                .bubble:nth-child(3) {
-                    width: 150px;
-                    height: 150px;
-                    top: 50%;
-                    right: 15%;
-                    animation-delay: 4s;
-                }
-
-            @@keyframes float {
-                0%, 100% {
-                    transform: translateY(0) scale(1);
-                }
-
-                50% {
-                    transform: translateY(-30px) scale(1.05);
-                }
-            }
-
-            .login-card {
-                background: rgba(255, 255, 255, 0.07);
-                backdrop-filter: blur(20px);
-                border: 1px solid rgba(255, 255, 255, 0.15);
-                border-radius: 24px;
-                padding: 50px 45px;
-                width: 420px;
-                box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            .left-panel {
+                flex: 1;
                 position: relative;
-                z-index: 10;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
             }
 
-            .logo-circle {
-                width: 80px;
-                height: 80px;
-                background: linear-gradient(135deg, #1a73e8, #00838f);
-                border-radius: 50%;
+            .bg-image {
+                position: absolute;
+                inset: 0;
+                background: url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1200&q=80') center/cover no-repeat;
+                z-index: 0;
+            }
+
+            .bg-overlay {
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(160deg, rgba(10,45,110,0.85) 0%, rgba(21,101,192,0.75) 50%, rgba(0,151,167,0.85) 100%);
+                z-index: 1;
+            }
+
+            .left-content {
+                position: relative;
+                z-index: 2;
+                padding: 40px;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                justify-content: space-between;
+            }
+
+            .brand-top {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .brand-icon {
+                width: 55px;
+                height: 55px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 14px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin: 0 auto 20px;
-                box-shadow: 0 8px 25px rgba(26,115,232,0.4);
+                border: 1px solid rgba(255,255,255,0.3);
             }
 
-                .logo-circle i {
-                    font-size: 2.2rem;
+                .brand-icon i {
+                    font-size: 1.8rem;
                     color: white;
                 }
 
-            h2 {
+            .brand-text h2 {
                 color: white;
-                font-weight: 700;
-                font-size: 1.8rem;
-                text-align: center;
-                margin-bottom: 5px;
+                font-size: 1.3rem;
+                font-weight: 800;
+                margin: 0;
             }
 
-            .subtitle {
-                color: rgba(255,255,255,0.6);
-                text-align: center;
-                margin-bottom: 35px;
-                font-size: 0.9rem;
+            .brand-text span {
+                color: rgba(255,255,255,0.7);
+                font-size: 0.8rem;
             }
 
-            .form-label {
-                color: rgba(255,255,255,0.8);
-                font-weight: 500;
-                font-size: 0.9rem;
-            }
-
-            .input-wrapper {
-                position: relative;
+            .brand-bottom {
                 margin-bottom: 20px;
             }
 
-                .input-wrapper i {
-                    position: absolute;
-                    left: 15px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    color: rgba(255,255,255,0.4);
-                    font-size: 1rem;
+                .brand-bottom h1 {
+                    color: white;
+                    font-size: 2.8rem;
+                    font-weight: 800;
+                    line-height: 1.1;
+                    margin-bottom: 10px;
                 }
 
-            .form-control {
-                background: rgba(255,255,255,0.08);
-                border: 1px solid rgba(255,255,255,0.15);
-                border-radius: 12px;
-                padding: 13px 15px 13px 42px;
-                color: white;
-                font-size: 0.95rem;
+                    .brand-bottom h1 span {
+                        color: #80deea;
+                    }
+
+                .brand-bottom .tagline {
+                    color: rgba(255,255,255,0.75);
+                    font-size: 1rem;
+                    font-style: italic;
+                    margin-bottom: 30px;
+                }
+
+            .info-cards {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .info-card {
+                background: rgba(255,255,255,0.12);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255,255,255,0.2);
+                border-radius: 14px;
+                padding: 16px;
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+                .info-card i {
+                    font-size: 1.3rem;
+                    color: #80deea;
+                    flex-shrink: 0;
+                    margin-top: 2px;
+                }
+
+                .info-card .info-text {
+                    flex: 1;
+                }
+
+                .info-card .info-label {
+                    color: rgba(255,255,255,0.6);
+                    font-size: 0.72rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    display: block;
+                    margin-bottom: 3px;
+                }
+
+                .info-card .info-value {
+                    color: white;
+                    font-size: 0.82rem;
+                    font-weight: 600;
+                    line-height: 1.4;
+                }
+
+            .right-panel {
+                width: 460px;
+                background: white;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 50px 45px;
+                box-shadow: -15px 0 50px rgba(0,0,0,0.1);
+            }
+
+            .login-box {
                 width: 100%;
             }
 
-                .form-control::placeholder {
-                    color: rgba(255,255,255,0.3);
+            .login-header {
+                margin-bottom: 32px;
+            }
+
+            .mini-logo {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 22px;
+            }
+
+            .mini-logo-icon {
+                width: 40px;
+                height: 40px;
+                background: linear-gradient(135deg, #1565c0, #0097a7);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+                .mini-logo-icon i {
+                    color: white;
+                    font-size: 1.2rem;
                 }
 
-                .form-control:focus {
-                    background: rgba(255,255,255,0.12);
-                    border-color: #1a73e8;
-                    box-shadow: 0 0 0 3px rgba(26,115,232,0.2);
-                    color: white;
-                    outline: none;
+            .mini-logo span {
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: #1565c0;
+            }
+
+            .login-header h2 {
+                font-size: 1.8rem;
+                font-weight: 800;
+                color: #0a2d6e;
+                margin-bottom: 5px;
+            }
+
+            .login-header p {
+                color: #888;
+                font-size: 0.88rem;
+            }
+
+            .form-label {
+                font-weight: 600;
+                color: #555;
+                font-size: 0.83rem;
+                margin-bottom: 6px;
+                display: block;
+            }
+
+            .input-wrap {
+                position: relative;
+                margin-bottom: 18px;
+            }
+
+                .input-wrap i {
+                    position: absolute;
+                    left: 14px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #1565c0;
+                    font-size: 1rem;
                 }
+
+                .input-wrap input {
+                    width: 100%;
+                    padding: 13px 15px 13px 42px;
+                    border: 2px solid #e8f0fe;
+                    border-radius: 12px;
+                    font-size: 0.92rem;
+                    background: #f8faff;
+                    color: #333;
+                    outline: none;
+                    transition: all 0.2s;
+                }
+
+                    .input-wrap input:focus {
+                        border-color: #1565c0;
+                        background: white;
+                        box-shadow: 0 0 0 4px rgba(21,101,192,0.1);
+                    }
+
+                    .input-wrap input::placeholder {
+                        color: #bbb;
+                    }
 
             .btn-login {
                 width: 100%;
-                padding: 13px;
-                background: linear-gradient(135deg, #1a73e8, #00838f);
+                padding: 14px;
+                background: linear-gradient(135deg, #0a2d6e 0%, #1565c0 50%, #0097a7 100%);
+                background-size: 200%;
                 border: none;
                 border-radius: 12px;
                 color: white;
-                font-weight: 600;
-                font-size: 1rem;
+                font-weight: 700;
+                font-size: 0.98rem;
                 cursor: pointer;
-                margin-top: 10px;
+                margin-top: 5px;
                 transition: all 0.3s;
-                box-shadow: 0 8px 20px rgba(26,115,232,0.35);
             }
 
                 .btn-login:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 12px 25px rgba(26,115,232,0.5);
+                    box-shadow: 0 10px 25px rgba(21,101,192,0.35);
                 }
 
-            .footer-text {
-                color: rgba(255,255,255,0.3);
-                text-align: center;
-                margin-top: 25px;
-                font-size: 0.8rem;
+            .alert-custom {
+                background: #fff5f5;
+                border: 1px solid #fed7d7;
+                border-radius: 10px;
+                padding: 12px 15px;
+                color: #c53030;
+                font-size: 0.88rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 20px;
             }
 
-            .alert-danger {
-                background: rgba(220,53,69,0.2);
-                border: 1px solid rgba(220,53,69,0.3);
-                color: #ff8a9a;
-                border-radius: 10px;
-                margin-bottom: 20px;
+            .footer-login {
+                text-align: center;
+                color: #ccc;
+                font-size: 0.78rem;
+                margin-top: 28px;
+                line-height: 1.6;
+            }
+
+                .footer-login strong {
+                    color: #1565c0;
+                }
+
+            @@media (max-width: 900px) {
+                .left-panel {
+                    display: none;
+                }
+
+                .right-panel {
+                    width: 100%;
+                    padding: 40px 25px;
+                }
             }
     </style>
 </head>
 <body>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
+    <div class="left-panel">
+        <div class="bg-image"></div>
+        <div class="bg-overlay"></div>
+        <div class="left-content">
+            <div class="brand-top">
+                <div class="brand-icon">
+                    <i class="bi bi-hospital"></i>
+                </div>
+                <div class="brand-text">
+                    <h2>Centro Odontológico Luant</h2>
+                    <span>Sistema de Gestión Clínica</span>
+                </div>
+            </div>
 
-    <div class="login-card">
-        <div class="logo-circle">
-            <i class="bi bi-hospital"></i>
+            <div class="brand-bottom">
+                <h1>Diseñamos<br>sonrisas, <span>creamos</span><br>confianza</h1>
+                <p class="tagline"></p>
+
+                <div class="info-cards">
+                    <div class="info-card">
+                        <i class="bi bi-clock-fill"></i>
+                        <div class="info-text">
+                            <span class="info-label">Horario de Atención</span>
+                            <span class="info-value">Lun - Vie: 8:00am - 7:00pm<br>Sáb: 9:00am - 2:00pm</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="bi bi-telephone-fill"></i>
+                        <div class="info-text">
+                            <span class="info-label">Contáctanos</span>
+                            <span class="info-value">+51 987 654 321<br>+51 01 234 5678</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="bi bi-envelope-fill"></i>
+                        <div class="info-text">
+                            <span class="info-label">Correo</span>
+                            <span class="info-value">centroluant2026<br>@@gmail.com</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <div class="info-text">
+                            <span class="info-label">Dirección</span>
+                            <span class="info-value">Av. Universitaria 1801<br>Lima, Perú</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <h2>Centro Odontológico</h2>
-        <p class="subtitle">Luant · Sistema de Gestión</p>
+    </div>
 
-        @if (ViewBag.Error != null)
-        {
-            <div class="alert alert-danger d-flex align-items-center gap-2">
-                <i class="bi bi-exclamation-triangle-fill"></i>
-                @ViewBag.Error
+    <div class="right-panel">
+        <div class="login-box">
+            <div class="login-header">
+                <div class="mini-logo">
+                    <div class="mini-logo-icon">
+                        <i class="bi bi-hospital"></i>
+                    </div>
+                    <span>Centro Odontológico Luant</span>
+                </div>
+                <h2>Bienvenido</h2>
+                <p>Ingresa tus credenciales para acceder al sistema de gestión</p>
             </div>
-        }
 
-        <form method="post">
-            <div class="input-wrapper">
-                <i class="bi bi-person"></i>
-                <input type="text" name="usuario" class="form-control" placeholder="Usuario" required />
-            </div>
-            <div class="input-wrapper">
-                <i class="bi bi-lock"></i>
-                <input type="password" name="contrasena" class="form-control" placeholder="Contraseña" required />
-            </div>
-            <button type="submit" class="btn-login">
-                <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
-            </button>
-        </form>
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-custom">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    @ViewBag.Error
+                </div>
+            }
 
-        <p class="footer-text">© 2026 Centro Odontológico Luant</p>
+            <form method="post">
+                <label class="form-label">Usuario</label>
+                <div class="input-wrap">
+                    <i class="bi bi-person"></i>
+                    <input type="text" name="usuario" placeholder="Ingrese su usuario" required />
+                </div>
+
+                <label class="form-label">Contraseña</label>
+                <div class="input-wrap">
+                    <i class="bi bi-lock"></i>
+                    <input type="password" name="contrasena" placeholder="Ingrese su contraseña" required />
+                </div>
+
+                <button type="submit" class="btn-login">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                </button>
+            </form>
+
+            <p class="footer-login">
+                © 2026 <strong>Centro Odontológico Luant</strong><br>
+                Diseñamos sonrisas, creamos confianza
+            </p>
+        </div>
     </div>
 </body>
 </html>

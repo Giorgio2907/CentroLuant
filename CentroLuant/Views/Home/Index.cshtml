@@ -4,176 +4,308 @@
 
 <style>
     .dashboard-wrapper {
+        padding: 25px;
         background: #f0f4f8;
-        min-height: 100vh;
-        padding: 30px;
+        min-height: calc(100vh - 60px);
     }
 
-    .welcome-banner {
-        background: linear-gradient(135deg, #1a73e8, #0d47a1);
+    .welcome-card {
+        background: linear-gradient(135deg, #0a2d6e 0%, #1565c0 50%, #0097a7 100%);
+        border-radius: 16px;
+        padding: 28px 30px;
+        margin-bottom: 25px;
         color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 15px;
+        box-shadow: 0 8px 25px rgba(21,101,192,0.3);
+    }
+
+    .welcome-left h3 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 4px;
+    }
+
+    .welcome-left p {
+        opacity: 0.75;
+        font-size: 0.88rem;
+        margin: 0;
+    }
+
+    .welcome-right {
+        text-align: right;
+    }
+
+        .welcome-right .date-badge {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            backdrop-filter: blur(5px);
+        }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border-left: 4px solid;
+        transition: transform 0.2s;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
         border-radius: 12px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 15px rgba(26,115,232,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+        .stat-icon i {
+            font-size: 1.4rem;
+            color: white;
+        }
+
+    .stat-info .stat-num {
+        font-size: 1.8rem;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 3px;
+    }
+
+    .stat-info .stat-label {
+        font-size: 0.78rem;
+        color: #888;
+        font-weight: 500;
+    }
+
+    .modules-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #999;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+    }
+
+    .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
     }
 
     .module-card {
-        border: none;
-        border-radius: 12px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        background: white;
+        border-radius: 16px;
         overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        text-decoration: none;
+        transition: all 0.25s;
+        display: block;
     }
 
         .module-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
         }
 
-        .module-card .card-top {
-            padding: 25px;
-            text-align: center;
+    .module-top {
+        padding: 28px 20px 22px;
+        text-align: center;
+    }
+
+        .module-top i {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 12px;
+            color: white;
         }
 
-            .module-card .card-top i {
-                font-size: 2.5rem;
-                margin-bottom: 10px;
-            }
-
-        .module-card .card-bottom {
-            background: #f8f9fa;
-            padding: 12px 20px;
-            font-size: 0.85rem;
-            color: #666;
-            border-top: 1px solid #eee;
+        .module-top h5 {
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
         }
 
-    .stat-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-        border-left: 4px solid;
+        .module-top small {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.75rem;
+        }
+
+    .module-bottom {
+        background: #f8faff;
+        padding: 11px 16px;
+        font-size: 0.78rem;
+        color: #666;
+        border-top: 1px solid #eef2ff;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    @@media (max-width: 900px) {
+        .stats-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .modules-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .welcome-card {
+            flex-direction: column;
+        }
+
+        .welcome-right {
+            text-align: left;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .dashboard-wrapper {
+            padding: 15px;
+        }
+
+        .stats-row {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modules-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-card {
+            padding: 15px;
+        }
+
+        .module-top {
+            padding: 20px 15px 15px;
+        }
     }
 </style>
 
 <div class="dashboard-wrapper">
-    <div class="welcome-banner">
-        <div class="d-flex align-items-center gap-3">
-            <i class="bi bi-hospital fs-1"></i>
-            <div>
-                <h3 class="mb-1 fw-bold">Centro Odontológico Luant</h3>
-                <p class="mb-0 opacity-75">Bienvenido, @Context.Session.GetString("Usuario") · @Context.Session.GetString("Rol")</p>
-                <small class="opacity-50">@DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-PE"))</small>
+    <div class="welcome-card">
+        <div class="welcome-left">
+            <h3>Bienvenido, @Context.Session.GetString("Usuario") 👋</h3>
+            <p>@Context.Session.GetString("Rol") · Centro Odontológico Luant</p>
+        </div>
+        <div class="welcome-right">
+            <div class="date-badge">
+                <i class="bi bi-calendar3 me-1"></i>
+                @DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-PE"))
             </div>
         </div>
     </div>
 
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="stat-card" style="border-color: #1a73e8;">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1 small">Total Pacientes</p>
-                        <h4 class="fw-bold mb-0">@ViewBag.TotalPacientes</h4>
-                    </div>
-                    <i class="bi bi-people fs-2 text-primary"></i>
-                </div>
+    <div class="stats-row">
+        <div class="stat-card" style="border-color:#1565c0;">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#1565c0,#1976d2);">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-num" style="color:#1565c0;">@ViewBag.TotalPacientes</div>
+                <div class="stat-label">Total Pacientes</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stat-card" style="border-color: #2e7d32;">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1 small">Citas Hoy</p>
-                        <h4 class="fw-bold mb-0 text-success">@ViewBag.CitasHoy</h4>
-                    </div>
-                    <i class="bi bi-calendar-check fs-2 text-success"></i>
-                </div>
+        <div class="stat-card" style="border-color:#2e7d32;">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#2e7d32,#43a047);">
+                <i class="bi bi-calendar-check-fill"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-num" style="color:#2e7d32;">@ViewBag.CitasHoy</div>
+                <div class="stat-label">Citas Hoy</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stat-card" style="border-color: #f57c00;">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1 small">Total Citas</p>
-                        <h4 class="fw-bold mb-0 text-warning">@ViewBag.TotalCitas</h4>
-                    </div>
-                    <i class="bi bi-calendar fs-2 text-warning"></i>
-                </div>
+        <div class="stat-card" style="border-color:#0097a7;">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#0097a7,#00acc1);">
+                <i class="bi bi-calendar-fill"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-num" style="color:#0097a7;">@ViewBag.TotalCitas</div>
+                <div class="stat-label">Total Citas</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stat-card" style="border-color: #c62828;">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1 small">Facturas Pendientes</p>
-                        <h4 class="fw-bold mb-0 text-danger">@ViewBag.FacturasPendientes</h4>
-                    </div>
-                    <i class="bi bi-receipt fs-2 text-danger"></i>
-                </div>
+        <div class="stat-card" style="border-color:#e65100;">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#e65100,#ef6c00);">
+                <i class="bi bi-receipt-cutoff"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-num" style="color:#e65100;">@ViewBag.FacturasPendientes</div>
+                <div class="stat-label">Facturas Pendientes</div>
             </div>
         </div>
     </div>
 
-    <h5 class="text-muted mb-3 fw-semibold">MÓDULOS DEL SISTEMA</h5>
-    <div class="row g-4">
-        <div class="col-md-3">
-            <a asp-controller="Paciente" asp-action="Index" class="text-decoration-none">
-                <div class="module-card card">
-                    <div class="card-top" style="background: linear-gradient(135deg, #1a73e8, #1557b0); color:white;">
-                        <i class="bi bi-people-fill"></i>
-                        <h5 class="fw-bold mb-1">Pacientes</h5>
-                        <small class="opacity-75">Registro y consulta</small>
-                    </div>
-                    <div class="card-bottom">
-                        <i class="bi bi-arrow-right-circle me-1"></i> Registrar · Buscar · Editar
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a asp-controller="Cita" asp-action="Index" class="text-decoration-none">
-                <div class="module-card card">
-                    <div class="card-top" style="background: linear-gradient(135deg, #2e7d32, #1b5e20); color:white;">
-                        <i class="bi bi-calendar2-check-fill"></i>
-                        <h5 class="fw-bold mb-1">Citas</h5>
-                        <small class="opacity-75">Agenda y programación</small>
-                    </div>
-                    <div class="card-bottom">
-                        <i class="bi bi-arrow-right-circle me-1"></i> Registrar · Consultar · Cancelar
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a asp-controller="Historial" asp-action="Index" class="text-decoration-none">
-                <div class="module-card card">
-                    <div class="card-top" style="background: linear-gradient(135deg, #00838f, #006064); color:white;">
-                        <i class="bi bi-clipboard2-heart-fill"></i>
-                        <h5 class="fw-bold mb-1">Gestión Clínica</h5>
-                        <small class="opacity-75">Historiales y tratamientos</small>
-                    </div>
-                    <div class="card-bottom">
-                        <i class="bi bi-arrow-right-circle me-1"></i> Historial · Diagnóstico · Tratamiento
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a asp-controller="Factura" asp-action="Index" class="text-decoration-none">
-                <div class="module-card card">
-                    <div class="card-top" style="background: linear-gradient(135deg, #6a1b9a, #4a148c); color:white;">
-                        <i class="bi bi-receipt-cutoff"></i>
-                        <h5 class="fw-bold mb-1">Facturación</h5>
-                        <small class="opacity-75">Cobros y comprobantes</small>
-                    </div>
-                    <div class="card-bottom">
-                        <i class="bi bi-arrow-right-circle me-1"></i> Emitir · Consultar · PDF
-                    </div>
-                </div>
-            </a>
-        </div>
+    <p class="modules-title">Módulos del Sistema</p>
+
+    <div class="modules-grid">
+        <a href="/Paciente/Index" class="module-card">
+            <div class="module-top" style="background:linear-gradient(135deg,#1565c0,#1976d2);">
+                <i class="bi bi-people-fill"></i>
+                <h5>Pacientes</h5>
+                <small>Registro y consulta</small>
+            </div>
+            <div class="module-bottom">
+                <i class="bi bi-arrow-right-circle text-primary"></i>
+                Registrar · Buscar · Editar
+            </div>
+        </a>
+        <a href="/Cita/Index" class="module-card">
+            <div class="module-top" style="background:linear-gradient(135deg,#2e7d32,#388e3c);">
+                <i class="bi bi-calendar2-check-fill"></i>
+                <h5>Citas</h5>
+                <small>Agenda y programación</small>
+            </div>
+            <div class="module-bottom">
+                <i class="bi bi-arrow-right-circle text-success"></i>
+                Registrar · Consultar · Cancelar
+            </div>
+        </a>
+        <a href="/Historial/Index" class="module-card">
+            <div class="module-top" style="background:linear-gradient(135deg,#0097a7,#00acc1);">
+                <i class="bi bi-clipboard2-heart-fill"></i>
+                <h5>Gestión Clínica</h5>
+                <small>Historiales y tratamientos</small>
+            </div>
+            <div class="module-bottom">
+                <i class="bi bi-arrow-right-circle" style="color:#0097a7;"></i>
+                Historial · Diagnóstico · Tratamiento
+            </div>
+        </a>
+        <a href="/Factura/Index" class="module-card">
+            <div class="module-top" style="background:linear-gradient(135deg,#e65100,#ef6c00);">
+                <i class="bi bi-receipt-cutoff"></i>
+                <h5>Facturación</h5>
+                <small>Cobros y comprobantes</small>
+            </div>
+            <div class="module-bottom">
+                <i class="bi bi-arrow-right-circle text-warning"></i>
+                Emitir · Consultar · PDF
+            </div>
+        </a>
     </div>
 </div>
