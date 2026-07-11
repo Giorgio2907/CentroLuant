@@ -81,6 +81,13 @@ namespace CentroLuant.Controllers
         [HttpPost]
         public IActionResult Generar(Factura factura)
         {
+            if (!ModelState.IsValid)
+            {
+                var paciente = _pacienteRepo.ObtenerPorDNI(factura.DNI_Paciente);
+                ViewBag.Paciente = paciente;
+                return View(factura);
+            }
+
             factura.FechaEmision = DateOnly.FromDateTime(DateTime.Now);
             _facturaRepo.Registrar(factura);
             TempData["Exito"] = "Factura generada correctamente.";

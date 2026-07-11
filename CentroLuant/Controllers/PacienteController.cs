@@ -37,6 +37,21 @@ namespace CentroLuant.Controllers
         [HttpPost]
         public IActionResult Registrar(Paciente paciente)
         {
+            if (paciente.FechaNacimiento.HasValue)
+            {
+                var hoy = DateOnly.FromDateTime(DateTime.Now);
+                var minFecha = new DateOnly(1900, 1, 1);
+                if (paciente.FechaNacimiento.Value > hoy || paciente.FechaNacimiento.Value < minFecha)
+                {
+                    ModelState.AddModelError("FechaNacimiento", "La fecha de nacimiento no es válida.");
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(paciente);
+            }
+
             var existente = _pacienteRepo.ObtenerPorDNI(paciente.DNI);
             if (existente != null)
             {
@@ -58,6 +73,21 @@ namespace CentroLuant.Controllers
         [HttpPost]
         public IActionResult Editar(Paciente paciente)
         {
+            if (paciente.FechaNacimiento.HasValue)
+            {
+                var hoy = DateOnly.FromDateTime(DateTime.Now);
+                var minFecha = new DateOnly(1900, 1, 1);
+                if (paciente.FechaNacimiento.Value > hoy || paciente.FechaNacimiento.Value < minFecha)
+                {
+                    ModelState.AddModelError("FechaNacimiento", "La fecha de nacimiento no es válida.");
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(paciente);
+            }
+
             _pacienteRepo.Actualizar(paciente);
             TempData["Exito"] = "Datos del paciente actualizados correctamente.";
             return RedirectToAction("Index");

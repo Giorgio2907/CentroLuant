@@ -45,20 +45,27 @@ namespace CentroLuant.Controllers
         [HttpPost]
         public async Task<IActionResult> Registrar(Cita cita)
         {
+            var paciente = _pacienteRepo.ObtenerPorDNI(cita.DNI_Paciente);
+            if (paciente == null)
+            {
+                ModelState.AddModelError("", "No existe ningún paciente registrado con ese DNI.");
+                ViewBag.Especialistas = _especialistaRepo.ObtenerTodos();
+                return View(cita);
+            }
+
             bool disponible = _citaRepo.VerificarDisponibilidad(cita.ID_Especialista, cita.Fecha, cita.Hora);
             if (!disponible)
             {
-                ModelState.AddModelError("", "El especialista no está disponible en ese horario.");
+                ModelState.AddModelError("", "El especialista no está disponible en ese horario. Debe haber al menos 30 minutos de diferencia entre citas.");
                 ViewBag.Especialistas = _especialistaRepo.ObtenerTodos();
                 return View(cita);
             }
 
             _citaRepo.Registrar(cita);
 
-            var paciente = _pacienteRepo.ObtenerPorDNI(cita.DNI_Paciente);
             var especialista = _especialistaRepo.ObtenerPorId(cita.ID_Especialista);
 
-            if (paciente != null && !string.IsNullOrEmpty(paciente.CorreoElectronico) && especialista != null)
+            if (!string.IsNullOrEmpty(paciente.CorreoElectronico) && especialista != null)
             {
                 try
                 {

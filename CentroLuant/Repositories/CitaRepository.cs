@@ -87,19 +87,27 @@ namespace CentroLuant.Repositories
         public bool VerificarDisponibilidad(int idEspecialista, DateOnly fecha, TimeOnly hora)
         {
             using var db = _conexion.ObtenerConexion();
-            var count = db.ExecuteScalar<int>(@"
-                SELECT COUNT(*) FROM Cita 
-                WHERE ID_Especialista = @ID 
-                AND Fecha = @Fecha 
-                AND Hora = @Hora
-                AND Estado != 'Cancelada'",
+            var horasOcupadas = db.Query<TimeSpan>(@"
+        SELECT Hora FROM Cita 
+        WHERE ID_Especialista = @ID 
+        AND Fecha = @Fecha 
+        AND Estado != 'Cancelada'",
                 new
                 {
                     ID = idEspecialista,
-                    Fecha = fecha.ToDateTime(TimeOnly.MinValue),
-                    Hora = hora.ToTimeSpan()
+                    Fecha = fecha.ToDateTime(TimeOnly.MinValue)
                 });
-            return count == 0;
+
+            foreach (var horaOcupada in horasOcupadas)
+            {
+                var diferencia = Math.Abs((hora.ToTimeSpan() - horaOcupada).TotalMinutes);
+                if (diferencia < 30)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void Registrar(Cita cita)

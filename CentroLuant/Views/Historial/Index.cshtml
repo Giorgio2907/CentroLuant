@@ -560,7 +560,7 @@
                         <div class="form-group-custom">
                             <label class="form-label-custom">Costo (S/)</label>
                             <input type="number" name="Costo" class="input-custom"
-                                   step="0.01" placeholder="0.00" required />
+                                   step="0.01" max="99999.99" placeholder="0.00" required />
                         </div>
                         <button type="button" class="btn-guardar-custom" onclick="guardarTratamiento()">
                             <i class="bi bi-check-circle"></i> Guardar Tratamiento
@@ -586,7 +586,7 @@
                 var dniPaciente = document.getElementById('dniPaciente')?.value;
         var idTratamientoGuardado = null;
 
-        function guardarTratamiento() {
+               function guardarTratamiento() {
             const form = document.getElementById('formTratamiento');
             if (!form.checkValidity()) {
                 form.reportValidity();
@@ -600,6 +600,8 @@
                   if (data.success) {
                       idTratamientoGuardado = data.idTratamiento;
                       mostrarModal();
+                  } else {
+                      alert(data.message || 'Ocurrió un error al guardar el tratamiento.');
                   }
               }).catch(() => {
                   form.submit();

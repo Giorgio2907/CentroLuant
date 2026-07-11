@@ -65,6 +65,12 @@ namespace CentroLuant.Controllers
         [HttpPost]
         public IActionResult AgregarTratamiento(Tratamiento tratamiento, string DNI_Paciente)
         {
+            if (!ModelState.IsValid)
+            {
+                var errores = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { success = false, message = string.Join(" ", errores) });
+            }
+
             var idTratamiento = _historialRepo.RegistrarTratamiento(tratamiento);
             TempData["Exito"] = "Tratamiento registrado correctamente.";
             return Json(new { success = true, idTratamiento });
@@ -80,6 +86,12 @@ namespace CentroLuant.Controllers
         [HttpPost]
         public IActionResult EditarTratamiento(Tratamiento tratamiento, string DNI_Paciente)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.DNI = DNI_Paciente;
+                return View(tratamiento);
+            }
+
             _historialRepo.ActualizarTratamiento(tratamiento);
             TempData["Exito"] = "Tratamiento actualizado correctamente.";
             return RedirectToAction("Index", new { dni = DNI_Paciente });

@@ -179,6 +179,15 @@
                     <p><strong>Paciente:</strong> @ViewBag.Paciente.NombreCompleto</p>
                     <p><strong>DNI:</strong> @ViewBag.Paciente.DNI</p>
                 </div>
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert-custom-danger">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <p>@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
 
                 <form asp-action="Generar" method="post">
                     <input type="hidden" name="DNI_Paciente" value="@ViewBag.Paciente.DNI" />
@@ -190,14 +199,14 @@
 
                     <div class="form-group-custom">
                         <label class="form-label-custom">Monto Total (S/)</label>
-                        <input type="number" name="MontoTotal" class="input-custom" step="0.01" value="@ViewBag.MontoSugerido" required />
+                        <input type="number" name="MontoTotal" class="input-custom" step="0.01" max="99999.99" value="@ViewBag.MontoSugerido" required />
                     </div>
 
                     <div class="acciones-row">
                         <button type="submit" class="btn-action-lg btn-generar-custom">
                             <i class="bi bi-check-circle"></i> Generar Factura
                         </button>
-                        <a href="/Historial/Index?dni=@ViewBag.Paciente.DNI" class="btn-action-lg btn-secondary-custom">
+                        <a asp-action="Index" class="btn-action-lg btn-secondary-custom">
                             Cancelar
                         </a>
                     </div>
