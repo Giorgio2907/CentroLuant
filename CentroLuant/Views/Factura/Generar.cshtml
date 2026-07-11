@@ -185,19 +185,19 @@
 
                     <div class="form-group-custom">
                         <label class="form-label-custom">Descripción de Servicios</label>
-                        <textarea name="DescripcionServicios" class="input-custom" rows="3" required></textarea>
+                        <textarea name="DescripcionServicios" class="input-custom" rows="3" required>@ViewBag.DescripcionSugerida</textarea>
                     </div>
 
                     <div class="form-group-custom">
                         <label class="form-label-custom">Monto Total (S/)</label>
-                        <input type="number" name="MontoTotal" class="input-custom" step="0.01" required />
+                        <input type="number" name="MontoTotal" class="input-custom" step="0.01" value="@ViewBag.MontoSugerido" required />
                     </div>
 
                     <div class="acciones-row">
                         <button type="submit" class="btn-action-lg btn-generar-custom">
                             <i class="bi bi-check-circle"></i> Generar Factura
                         </button>
-                        <a asp-action="Index" class="btn-action-lg btn-secondary-custom">
+                        <a href="/Historial/Index?dni=@ViewBag.Paciente.DNI" class="btn-action-lg btn-secondary-custom">
                             Cancelar
                         </a>
                     </div>

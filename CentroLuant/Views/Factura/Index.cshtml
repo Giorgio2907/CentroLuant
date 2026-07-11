@@ -31,6 +31,28 @@
         overflow: hidden;
     }
 
+    .alert-custom {
+        border-radius: 12px;
+        padding: 14px 18px;
+        font-size: 0.88rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .alert-error-custom {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+
+    .alert-success-custom {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
     .generar-bar {
         padding: 18px 20px;
         border-bottom: 1px solid #f0f4f8;
@@ -166,6 +188,16 @@
             color: white;
         }
 
+    .btn-danger-custom {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+        .btn-danger-custom:hover {
+            background: #c62828;
+            color: white;
+        }
+
     .empty-state {
         text-align: center;
         padding: 50px 20px;
@@ -194,6 +226,14 @@
     <div class="page-header">
         <h2><i class="bi bi-receipt-cutoff me-2" style="color:#e65100;"></i>Facturación</h2>
     </div>
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert-custom alert-success-custom">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>@TempData["Exito"]</span>
+        </div>
+    }
 
     <div class="card-custom mb-3">
         <div class="generar-bar">
@@ -246,6 +286,11 @@
                                                 <i class="bi bi-check-circle"></i> Marcar Pagado
                                             </a>
                                         }
+                                        <a asp-action="Eliminar" asp-route-id="@f.ID_Factura"
+                                           class="btn-action btn-danger-custom"
+                                           onclick="return confirm('¿Eliminar esta factura permanentemente?')">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

@@ -66,12 +66,13 @@ namespace CentroLuant.Repositories
             });
         }
 
-        public void RegistrarTratamiento(Tratamiento tratamiento)
+        public int RegistrarTratamiento(Tratamiento tratamiento)
         {
             using var db = _conexion.ObtenerConexion();
-            db.Execute(@"
-                INSERT INTO Tratamiento (ID_Historial, FechaTratamiento, Diagnostico, TipoTratamiento, Observaciones, Costo)
-                VALUES (@ID_Historial, @FechaTratamiento, @Diagnostico, @TipoTratamiento, @Observaciones, @Costo)",
+            var id = db.ExecuteScalar<int>(@"
+        INSERT INTO Tratamiento (ID_Historial, FechaTratamiento, Diagnostico, TipoTratamiento, Observaciones, Costo)
+        VALUES (@ID_Historial, @FechaTratamiento, @Diagnostico, @TipoTratamiento, @Observaciones, @Costo);
+        SELECT CAST(SCOPE_IDENTITY() AS INT);",
                 new
                 {
                     tratamiento.ID_Historial,
@@ -81,6 +82,7 @@ namespace CentroLuant.Repositories
                     tratamiento.Observaciones,
                     tratamiento.Costo
                 });
+            return id;
         }
 
         public void ActualizarTratamiento(Tratamiento tratamiento)
@@ -121,6 +123,11 @@ namespace CentroLuant.Repositories
                 Observaciones = r.Observaciones,
                 Costo = r.Costo
             };
+        }
+        public void EliminarTratamiento(int id)
+        {
+            using var db = _conexion.ObtenerConexion();
+            db.Execute("DELETE FROM Tratamiento WHERE ID_Tratamiento = @ID", new { ID = id });
         }
     }
 }

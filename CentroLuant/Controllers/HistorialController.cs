@@ -65,9 +65,9 @@ namespace CentroLuant.Controllers
         [HttpPost]
         public IActionResult AgregarTratamiento(Tratamiento tratamiento, string DNI_Paciente)
         {
-            _historialRepo.RegistrarTratamiento(tratamiento);
+            var idTratamiento = _historialRepo.RegistrarTratamiento(tratamiento);
             TempData["Exito"] = "Tratamiento registrado correctamente.";
-            return RedirectToAction("Index", new { dni = DNI_Paciente });
+            return Json(new { success = true, idTratamiento });
         }
 
         public IActionResult EditarTratamiento(int id)
@@ -82,6 +82,12 @@ namespace CentroLuant.Controllers
         {
             _historialRepo.ActualizarTratamiento(tratamiento);
             TempData["Exito"] = "Tratamiento actualizado correctamente.";
+            return RedirectToAction("Index", new { dni = DNI_Paciente });
+        }
+        public IActionResult EliminarTratamiento(int id, string DNI_Paciente)
+        {
+            _historialRepo.EliminarTratamiento(id);
+            TempData["Exito"] = "Tratamiento eliminado correctamente.";
             return RedirectToAction("Index", new { dni = DNI_Paciente });
         }
     }

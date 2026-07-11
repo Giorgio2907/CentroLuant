@@ -39,16 +39,41 @@ namespace CentroLuant.Controllers
             return View(factura);
         }
 
-        public IActionResult Generar(string dni)
+        public IActionResult Generar(string dni, int? idTratamiento)
         {
+            if (string.IsNullOrWhiteSpace(dni))
+            {
+                TempData["Error"] = "Debe ingresar un DNI para generar la factura.";
+                return RedirectToAction("Index");
+            }
+
             var paciente = _pacienteRepo.ObtenerPorDNI(dni);
-            if (paciente == null) return NotFound();
+            if (paciente == null)
+            {
+                TempData["Error"] = "No se encontró ningún paciente con ese DNI.";
+                return RedirectToAction("Index");
+            }
+
             var historial = _historialRepo.ObtenerPorPaciente(dni);
             if (historial != null)
             {
                 var tratamientos = _historialRepo.ObtenerTratamientos(historial.ID_Historial);
                 ViewBag.Tratamientos = tratamientos;
+
+                if (idTratamiento.HasValue)
+                {
+                    var tratamientoSeleccionado = tratamientos
+                        .FirstOrDefault(t => t.ID_Tratamiento == idTratamiento.Value);
+
+                    if (tratamientoSeleccionado != null)
+                    {
+                        ViewBag.MontoSugerido = tratamientoSeleccionado.Costo;
+                        ViewBag.DescripcionSugerida = tratamientoSeleccionado.TipoTratamiento
+                            + (string.IsNullOrEmpty(tratamientoSeleccionado.Diagnostico) ? "" : " - " + tratamientoSeleccionado.Diagnostico);
+                    }
+                }
             }
+
             ViewBag.Paciente = paciente;
             return View();
         }
@@ -76,6 +101,13 @@ namespace CentroLuant.Controllers
             if (factura == null) return NotFound();
             var pdf = _pdfService.GenerarPdf(factura);
             return File(pdf, "application/pdf", $"Factura_{id}.pdf");
+        }
+
+        public IActionResult Eliminar(int id)
+        {
+            _facturaRepo.Eliminar(id);
+            TempData["Exito"] = "Factura eliminada correctamente.";
+            return RedirectToAction("Index");
         }
     }
 }

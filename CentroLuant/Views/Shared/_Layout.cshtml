@@ -239,6 +239,48 @@
                 padding: 12px 20px 0;
             }
 
+            .alert-custom {
+                border-radius: 12px;
+                padding: 14px 18px;
+                font-size: 0.88rem;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border: 1px solid transparent;
+            }
+
+                .alert-custom i {
+                    font-size: 1.1rem;
+                    flex-shrink: 0;
+                }
+
+                .alert-custom .alert-close {
+                    margin-left: auto;
+                    background: none;
+                    border: none;
+                    font-size: 1.1rem;
+                    line-height: 1;
+                    cursor: pointer;
+                    opacity: 0.6;
+                    transition: opacity 0.2s;
+                }
+
+                    .alert-custom .alert-close:hover {
+                        opacity: 1;
+                    }
+
+            .alert-success-custom {
+                background: #e8f5e9;
+                color: #2e7d32;
+                border-color: #c8e6c9;
+            }
+
+            .alert-error-custom {
+                background: #ffebee;
+                color: #c62828;
+                border-color: #ffcdd2;
+            }
+
             /* OVERLAY */
             .sidebar-overlay {
                 display: none;
@@ -374,20 +416,24 @@
         @if (TempData["Exito"] != null)
         {
             <div class="alert-wrapper">
-                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
+                <div class="alert-custom alert-success-custom">
                     <i class="bi bi-check-circle-fill"></i>
-                    @TempData["Exito"]
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+                    <span>@TempData["Exito"]</span>
+                    <button type="button" class="alert-close" onclick="this.closest('.alert-wrapper').style.display='none'">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
                 </div>
             </div>
         }
         @if (TempData["Error"] != null)
         {
             <div class="alert-wrapper">
-                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill"></i>
-                    @TempData["Error"]
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+                <div class="alert-custom alert-error-custom">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                    <span>@TempData["Error"]</span>
+                    <button type="button" class="alert-close" onclick="this.closest('.alert-wrapper').style.display='none'">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
                 </div>
             </div>
         }

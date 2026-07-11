@@ -100,5 +100,10 @@ namespace CentroLuant.Repositories
             return db.ExecuteScalar<int>(
                 "SELECT COUNT(*) FROM Factura WHERE EstadoPago = 'Pendiente'");
         }
+        public void Eliminar(int id)
+        {
+            using var db = _conexion.ObtenerConexion();
+            db.Execute("DELETE FROM Factura WHERE ID_Factura = @ID", new { ID = id });
+        }
     }
 }

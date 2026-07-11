@@ -98,5 +98,11 @@ namespace CentroLuant.Controllers
             TempData["Exito"] = "Cita reprogramada correctamente.";
             return RedirectToAction("Index");
         }
+        public IActionResult Eliminar(int id)
+        {
+            _citaRepo.Eliminar(id);
+            TempData["Exito"] = "Cita eliminada correctamente.";
+            return RedirectToAction("Index");
+        }
     }
 }

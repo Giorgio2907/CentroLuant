@@ -277,7 +277,7 @@
                 <div class="col-md-6 d-flex align-items-start justify-content-md-end mt-3 mt-md-0">
                     <div class="tipo-cambio-box">
                         <small>Tipo de cambio</small>
-                        <strong>1 USD = S/ @(1 / ViewBag.TipoCambio)</strong>
+                        <strong>1 USD = S/ @((1 / (double)ViewBag.TipoCambio).ToString("0.000"))</strong>
                     </div>
                 </div>
             </div>

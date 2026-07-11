@@ -24,6 +24,26 @@
             margin: 0;
         }
 
+    .btn-back {
+        background: #f0f4f8;
+        border: none;
+        border-radius: 10px;
+        color: #555;
+        padding: 9px 16px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+
+        .btn-back:hover {
+            background: #e8f0fe;
+            color: #1565c0;
+        }
+
     .card-custom {
         background: white;
         border-radius: 14px;
@@ -203,12 +223,14 @@
 </style>
 
 <div class="page-wrapper">
-
     <div class="page-header">
         <h2>
             <i class="bi bi-search-heart me-2" style="color:#2e7d32;"></i>
             Consultar Citas por Paciente
         </h2>
+        <a asp-action="Index" class="btn-back">
+            <i class="bi bi-arrow-left"></i> Volver a Citas
+        </a>
     </div>
 
     <div class="card-custom" style="margin-bottom:20px;">
@@ -227,9 +249,9 @@
     {
         <div class="card-custom">
             <div class="results-header">
-                <i class="bi bi-calendar2-check-fill"></i> Citas del paciente
+                <i class="bi bi-calendar2-check-fill"></i>
+                Citas del paciente · DNI: @ViewBag.DNI
             </div>
-
             <div style="overflow-x:auto;">
                 <table class="table-custom">
                     <thead>
@@ -266,6 +288,12 @@
                                            onclick="return confirm('¿Cancelar esta cita?')">
                                             <i class="bi bi-x-circle"></i> Cancelar
                                         </a>
+                                        <a asp-action="Eliminar" asp-route-id="@cita.ID_Cita"
+                                           class="btn-action"
+                                           style="background:#f3e5f5;color:#6a1b9a;"
+                                           onclick="return confirm('¿Eliminar esta cita permanentemente?')">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -280,9 +308,8 @@
         <div class="card-custom">
             <div class="empty-state warning">
                 <i class="bi bi-exclamation-circle"></i>
-                No se encontraron citas para ese DNI.
+                No se encontraron citas para ese DNI
             </div>
         </div>
     }
-
 </div>

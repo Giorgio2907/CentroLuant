@@ -261,6 +261,12 @@
                                            onclick="return confirm('¿Cancelar esta cita?')">
                                             <i class="bi bi-x-circle"></i> Cancelar
                                         </a>
+                                        <a asp-action="Eliminar" asp-route-id="@cita.ID_Cita"
+                                           class="btn-action"
+                                           style="background:#f3e5f5;color:#6a1b9a;"
+                                           onclick="return confirm('¿Eliminar esta cita permanentemente?')">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

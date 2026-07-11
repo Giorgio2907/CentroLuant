@@ -150,10 +150,6 @@
                 font-weight: 700;
             }
 
-            .historial-body p:last-child {
-                margin-bottom: 0;
-            }
-
     .section-header {
         padding: 16px 20px;
         border-bottom: 1px solid #f0f4f8;
@@ -222,6 +218,26 @@
             color: white;
         }
 
+    .btn-danger-custom {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+        .btn-danger-custom:hover {
+            background: #c62828;
+            color: white;
+        }
+
+    .btn-factura-custom {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+        .btn-factura-custom:hover {
+            background: #2e7d32;
+            color: white;
+        }
+
     .empty-state {
         text-align: center;
         padding: 40px 20px;
@@ -276,6 +292,112 @@
         align-items: start;
     }
 
+    /* MODAL */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+    .modal-box {
+        background: white;
+        border-radius: 18px;
+        padding: 35px;
+        max-width: 420px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        animation: popIn 0.3s ease;
+    }
+
+    @@keyframes popIn {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .modal-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #2e7d32, #43a047);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 18px;
+    }
+
+        .modal-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+    .modal-box h4 {
+        font-weight: 800;
+        color: #0a2d6e;
+        margin-bottom: 8px;
+    }
+
+    .modal-box p {
+        color: #777;
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-modal-yes {
+        flex: 1;
+        background: linear-gradient(135deg, #1565c0, #0097a7);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-modal-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(21,101,192,0.3);
+        }
+
+    .btn-modal-no {
+        flex: 1;
+        background: #f5f5f5;
+        border: none;
+        border-radius: 10px;
+        color: #555;
+        padding: 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-modal-no:hover {
+            background: #e0e0e0;
+        }
+
     @@media (max-width: 900px) {
         .clinica-grid {
             grid-template-columns: 1fr;
@@ -287,17 +409,35 @@
             padding: 15px;
         }
 
-        .table-custom th:nth-child(3),
-        .table-custom td:nth-child(3) {
+        .table-custom th:nth-child(3), .table-custom td:nth-child(3) {
             display: none;
         }
     }
 </style>
 
+<!-- MODAL FACTURA -->
+<div class="modal-overlay" id="modalFactura">
+    <div class="modal-box">
+        <div class="modal-icon">
+            <i class="bi bi-receipt-cutoff"></i>
+        </div>
+        <h4>¿Generar Factura?</h4>
+        <p>El tratamiento fue guardado correctamente. ¿Deseas generar la factura para este paciente ahora?</p>
+        <div class="modal-buttons">
+            <button class="btn-modal-yes" id="btnGenerarFactura">
+                <i class="bi bi-receipt me-1"></i> Sí, generar factura
+            </button>
+            <button class="btn-modal-no" onclick="cerrarModal()">
+                No, después
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="page-wrapper">
     <div class="page-header">
         <h2><i class="bi bi-clipboard2-heart-fill me-2" style="color:#0097a7;"></i>Gestión Clínica</h2>
-    </div>  
+    </div>
 
     <div class="card-custom mb-3">
         <div class="search-bar">
@@ -358,10 +498,22 @@
                                         <td>@t.Diagnostico</td>
                                         <td style="font-weight:700;color:#0097a7;">S/ @t.Costo</td>
                                         <td>
-                                            <a asp-action="EditarTratamiento" asp-route-id="@t.ID_Tratamiento"
-                                               class="btn-action btn-warning-custom">
-                                                <i class="bi bi-pencil"></i> Editar
-                                            </a>
+                                            <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                                                <a asp-action="EditarTratamiento" asp-route-id="@t.ID_Tratamiento"
+                                                   class="btn-action btn-warning-custom">
+                                                    <i class="bi bi-pencil"></i> Editar
+                                                </a>
+                                                <a asp-action="EliminarTratamiento" asp-route-id="@t.ID_Tratamiento"
+                                                   asp-route-dni="@Model.DNI_Paciente"
+                                                   class="btn-action btn-danger-custom"
+                                                   onclick="return confirm('¿Eliminar este tratamiento?')">
+                                                    <i class="bi bi-trash"></i> Eliminar
+                                                </a>
+                                                <a href="/Factura/Generar?dni=@Model.DNI_Paciente&idTratamiento=@t.ID_Tratamiento"
+                                                   class="btn-action btn-factura-custom">
+                                                    <i class="bi bi-receipt"></i> Facturar
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 }
@@ -383,10 +535,9 @@
                     <i class="bi bi-plus-circle" style="color:#2e7d32;"></i> Registrar Nuevo Tratamiento
                 </div>
                 <div class="historial-body">
-                    <form asp-action="AgregarTratamiento" method="post">
+                    <form id="formTratamiento" asp-action="AgregarTratamiento" method="post">
                         <input type="hidden" name="ID_Historial" value="@Model.ID_Historial" />
-                        <input type="hidden" name="DNI_Paciente" value="@Model.DNI_Paciente" />
-
+                        <input type="hidden" name="DNI_Paciente" value="@Model.DNI_Paciente" id="dniPaciente" />
                         <div class="form-group-custom">
                             <label class="form-label-custom">Fecha</label>
                             <input type="date" name="FechaTratamiento" class="input-custom" required />
@@ -411,8 +562,7 @@
                             <input type="number" name="Costo" class="input-custom"
                                    step="0.01" placeholder="0.00" required />
                         </div>
-
-                        <button type="submit" class="btn-guardar-custom">
+                        <button type="button" class="btn-guardar-custom" onclick="guardarTratamiento()">
                             <i class="bi bi-check-circle"></i> Guardar Tratamiento
                         </button>
                     </form>
@@ -430,3 +580,47 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+                var dniPaciente = document.getElementById('dniPaciente')?.value;
+        var idTratamientoGuardado = null;
+
+        function guardarTratamiento() {
+            const form = document.getElementById('formTratamiento');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form)
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      idTratamientoGuardado = data.idTratamiento;
+                      mostrarModal();
+                  }
+              }).catch(() => {
+                  form.submit();
+              });
+        }
+
+        function mostrarModal() {
+            document.getElementById('modalFactura').classList.add('show');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalFactura').classList.remove('show');
+            window.location.href = '/Historial/Index?dni=' + dniPaciente;
+        }
+
+        document.getElementById('btnGenerarFactura').addEventListener('click', function() {
+            var url = '/Factura/Generar?dni=' + dniPaciente;
+            if (idTratamientoGuardado) {
+                url += '&idTratamiento=' + idTratamientoGuardado;
+            }
+            window.location.href = url;
+        });
+    </script>
+}

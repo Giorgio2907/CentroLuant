@@ -150,5 +150,10 @@ namespace CentroLuant.Repositories
                 "SELECT COUNT(*) FROM Cita WHERE Fecha = @Hoy AND Estado = 'Programada'",
                 new { Hoy = DateTime.Today });
         }
+        public void Eliminar(int id)
+        {
+            using var db = _conexion.ObtenerConexion();
+            db.Execute("DELETE FROM Cita WHERE ID_Cita = @ID", new { ID = id });
+        }
     }
 }
